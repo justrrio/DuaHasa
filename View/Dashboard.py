@@ -9,7 +9,9 @@ from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
     QLayout, QMainWindow, QSizePolicy, QVBoxLayout,
     QWidget)
 
-class Ui_MainWindow(object):
+import sys
+
+class dashboard(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
@@ -324,3 +326,10 @@ class Ui_MainWindow(object):
         self.Star.setText("")
     # retranslateUi
 
+if __name__ == "__main__":
+        app = QApplication(sys.argv)
+        MainWindow = QMainWindow()
+        ui = dashboard()
+        ui.setupUi(MainWindow)
+        MainWindow.show()
+        sys.exit(app.exec())
