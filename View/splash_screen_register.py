@@ -2,6 +2,7 @@ import sys
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from PySide6.QtGui import *
+from splash_screen_login import SplashScreenLogin
 
 #================================================#
 #        -- SPLASH SCREEN REGISTER --            #
@@ -205,6 +206,11 @@ class SplashScreenRegister:
         img_label.setPixmap(pixmap)
         img_label.move(140, 340)
 
+    # show second window
+    def gotoLogin(self):
+        self.second_window = SplashScreenLogin()
+        self.second_window.show()
+        self.hide()
 
     # Click (to Drag) window Function
     def mousePressEvent(self, event):
