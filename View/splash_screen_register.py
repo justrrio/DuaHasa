@@ -230,3 +230,4 @@ class SplashScreenRegister:
                 delta = global_pos - self.oldPos
                 self.move(self.pos() + delta)
                 self.oldPos = global_pos
+
