@@ -600,6 +600,7 @@ class Ui_MainWindow(object):
         self.Kembali_popup_2.setIcon(icon8)
         self.Kembali_popup_2.setIconSize(QSize(1000, 1000))
         self.Kembali_popup_2.setCheckable(True)
+
         self.Icon_popup_belajar = QToolButton(self.Pop_up_mulai)
         self.Icon_popup_belajar.setObjectName(u"Icon_popup_belajar")
         self.Icon_popup_belajar.setGeometry(QRect(440, 30, 401, 61))
@@ -608,6 +609,8 @@ class Ui_MainWindow(object):
         icon9.addFile(u"../Documents/Project/DuaHasa/Assets/Dashboard/Mulai_belajar_popup1.png", QSize(), QIcon.Normal, QIcon.Off)
         self.Icon_popup_belajar.setIcon(icon9)
         self.Icon_popup_belajar.setIconSize(QSize(1000, 1000))
+
+
         self.Flash_card_popup = QToolButton(self.Pop_up_mulai)
         self.Flash_card_popup.setObjectName(u"Flash_card_popup")
         self.Flash_card_popup.setGeometry(QRect(110, 120, 431, 481))
@@ -616,6 +619,7 @@ class Ui_MainWindow(object):
         icon10.addFile(u"../Documents/Project/DuaHasa/Assets/Dashboard/Flash_card_belajar.png", QSize(), QIcon.Normal, QIcon.Off)
         self.Flash_card_popup.setIcon(icon10)
         self.Flash_card_popup.setIconSize(QSize(1000, 1000))
+        
         self.Pilihan_ganda_popup = QToolButton(self.Pop_up_mulai)
         self.Pilihan_ganda_popup.setObjectName(u"Pilihan_ganda_popup")
         self.Pilihan_ganda_popup.setGeometry(QRect(610, 120, 430, 481))
