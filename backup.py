@@ -17,7 +17,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QHBoxLayout,
     QLabel, QMainWindow, QProgressBar, QPushButton,
-    QSizePolicy, QToolButton, QWidget, QStyledItemDelegate, QVBoxLayout, QGraphicsOpacityEffect, QPlainTextEdit, QFileDialog)
+    QSizePolicy, QToolButton, QWidget, QStyledItemDelegate, QVBoxLayout, QGraphicsOpacityEffect)
 
 import sys
 
@@ -255,136 +255,13 @@ class Flashcard(object):
 
         self.lineFlashcardPopUp = QLabel(self.frame_2)
         self.lineFlashcardPopUp.setObjectName(u"lineFlashcardPopUp")
-        self.lineFlashcardPopUp.setGeometry(QRect(80, 200, 980, 41))
+        self.lineFlashcardPopUp.setGeometry(QRect(80, 250, 980, 41))
         self.lineFlashcardPopUp.setPixmap(QPixmap(u"Assets\Flashcards\Middlebar\PopUp Line.png"))
         self.lineFlashcardPopUp.setScaledContents(False)
         self.lineFlashcardPopUp.setStyleSheet(u"QLabel {\n"
 "    background: transparent;\n"
 "}")
         self.lineFlashcardPopUp.setVisible(False)
-
-        self.isiFlashcardDepanBg = QLabel(self.frame_2)
-        self.isiFlashcardDepanBg.setObjectName(u"isiFlashcardDepanBg")
-        self.isiFlashcardDepanBg.setGeometry(QRect(80, 250, 401, 471))
-        self.isiFlashcardDepanBg.setStyleSheet(u"QLabel {\n"
-"    background-color: #2354B4;\n"
-"    border-radius: 30px;\n"
-"}")
-        self.isiFlashcardDepanBg.setVisible(False)
-
-        self.isiFlashcardBelakangBg = QLabel(self.frame_2)
-        self.isiFlashcardBelakangBg.setObjectName(u"isiFlashcardBelakangBg")
-        self.isiFlashcardBelakangBg.setGeometry(QRect(620, 250, 401, 471))
-        self.isiFlashcardBelakangBg.setStyleSheet(u"QLabel {\n"
-"    background-color: #2354B4;\n"
-"    border-radius: 30px;\n"
-"}")
-        self.isiFlashcardBelakangBg.setVisible(False)
-
-        self.labelTekanFlashcardDepan = QLabel(self.frame_2)
-        self.labelTekanFlashcardDepan.setObjectName(u"labelTekanFlashcardDepan")
-        self.labelTekanFlashcardDepan.setGeometry(QRect(110, 640, 351, 51))
-        self.labelTekanFlashcardDepan.setStyleSheet(u"QLabel {\n"
-"    background: transparent;\n"
-"    color: #15387C;\n"
-"}")
-        self.labelTekanFlashcardDepan.setVisible(False)
-
-        self.labelTekanFlashcardBelakang = QLabel(self.frame_2)
-        self.labelTekanFlashcardBelakang.setObjectName(u"labelTekanFlashcardBelakang")
-        self.labelTekanFlashcardBelakang.setGeometry(QRect(640, 640, 351, 51))
-        self.labelTekanFlashcardBelakang.setStyleSheet(u"QLabel {\n"
-"    background: transparent;\n"
-"    color: #15387C;\n"
-"}")
-        self.labelTekanFlashcardBelakang.setVisible(False)
-
-        fontLabelTekan = QFont()
-        fontLabelTekan.setFamilies([u"Jellee"])
-        fontLabelTekan.setPointSize(18)
-        self.labelTekanFlashcardDepan.setFont(fontLabelTekan)
-        self.labelTekanFlashcardBelakang.setFont(fontLabelTekan)
-
-        self.labelJawabanBelakang = QLabel(self.frame_2)
-        self.labelJawabanBelakang.setObjectName(u"labelJawabanBelakang")
-        self.labelJawabanBelakang.setGeometry(QRect(640, 250, 361, 71))
-        self.labelJawabanBelakang.setStyleSheet(u"QLabel {\n"
-"    background: transparent;\n"
-"    color: white;\n"
-"}")
-        self.labelJawabanBelakang.setVisible(False)
-
-        fontJawaban = QFont()
-        fontJawaban.setFamilies([u"Jellee"])
-        fontJawaban.setPointSize(18)
-        self.labelJawabanBelakang.setFont(fontJawaban)
-
-        self.inputTextFlashcardDepan = QPlainTextEdit(self.frame_2)
-        self.inputTextFlashcardDepan.setObjectName(u"inputTextFlashcardDepan")
-        self.inputTextFlashcardDepan.setGeometry(QRect(100, 270, 361, 71))
-        self.inputTextFlashcardDepan.setStyleSheet(u"QPlainTextEdit {\n"
-"    background: transparent;\n"
-"    color: white;\n"
-"    border: 0px\n"
-"}")
-        self.inputTextFlashcardDepan.setVisible(False)
-
-        self.inputTextFlashcardBelakangJepang = QPlainTextEdit(self.frame_2)
-        self.inputTextFlashcardBelakangJepang.setObjectName(u"inputTextFlashcardBelakangJepang")
-        self.inputTextFlashcardBelakangJepang.setGeometry(QRect(640, 450, 361, 71))
-        self.inputTextFlashcardBelakangJepang.setStyleSheet(u"QPlainTextEdit {\n"
-"    background: transparent;\n"
-"    color: white;\n"
-"    border: 0px\n"
-    "}")
-        self.inputTextFlashcardBelakangJepang.setVisible(False)
-
-        self.inputTextFlashcardBelakangLatin = QPlainTextEdit(self.frame_2)
-        self.inputTextFlashcardBelakangLatin.setObjectName(u"inputTextFlashcardBelakangLatin")
-        self.inputTextFlashcardBelakangLatin.setGeometry(QRect(640, 500, 361, 71))
-        self.inputTextFlashcardBelakangLatin.setStyleSheet(u"QPlainTextEdit {\n"
-"    background: transparent;\n"
-"    color: white;\n"
-"    border: 0px\n"
-    "}")
-        self.inputTextFlashcardBelakangLatin.setVisible(False)
-
-        fontInputText = QFont()
-        fontInputText.setFamilies([u"Jellee"])
-        fontInputText.setPointSize(18)
-        self.inputTextFlashcardDepan.setFont(fontInputText)
-        self.inputTextFlashcardBelakangJepang.setFont(fontInputText)
-        self.inputTextFlashcardBelakangLatin.setFont(fontInputText)
-
-        # Set placeholder text
-        self.inputTextFlashcardDepan.setPlaceholderText("Masukkan pertanyaan...")
-        self.inputTextFlashcardBelakangJepang.setPlaceholderText("Masukkan jawaban Jepang...")
-        self.inputTextFlashcardBelakangLatin.setPlaceholderText("Masukkan jawaban latin...")
-
-        self.inputGambarFlashcardDepan = QLabel(self.frame_2)
-        self.inputGambarFlashcardDepan.setObjectName(u"inputGambarFlashcardDepan")
-        self.inputGambarFlashcardDepan.setGeometry(QRect(100, 360, 361, 261))
-        self.inputGambarFlashcardDepan.setPixmap(QPixmap(u"Assets/Flashcards/Middlebar/Unggah Gambar.png"))
-        self.inputGambarFlashcardDepan.setScaledContents(True)
-        self.inputGambarFlashcardDepan.setCursor(QCursor(Qt.PointingHandCursor))
-        self.inputGambarFlashcardDepan.setStyleSheet(u"QLabel {\n"
-"    background: transparent;\n"
-"    border-radius: 20px;\n"
-"}")
-        self.inputGambarFlashcardDepan.setVisible(False)
-
-        self.btnTambahFlashcard = QLabel(self.frame_2)
-        self.btnTambahFlashcard.setObjectName(u"btnTambahFlashcard")
-        self.btnTambahFlashcard.setGeometry(QRect(240, 750, 311, 61))
-        self.btnTambahFlashcard.setPixmap(QPixmap(u"Assets/Flashcards/Middlebar/Tambah Flashcard.png"))
-        self.btnTambahFlashcard.setScaledContents(True)
-        self.btnTambahFlashcard.setCursor(QCursor(Qt.PointingHandCursor))
-        self.btnTambahFlashcard.setStyleSheet(u"QLabel {\n"
-"    background: transparent;\n"
-"    border-radius: 20px;\n"
-"}")
-
-        self.btnTambahFlashcard.setVisible(False)
 
 ###############################################################################
 ############################ FLASHCARD SYSTEM #################################
@@ -468,16 +345,6 @@ class Flashcard(object):
         self.btnKembaliPopUp.raise_()
         self.labelFlashcardBaruPopUp.raise_()
         self.lineFlashcardPopUp.raise_()
-        self.isiFlashcardDepanBg.raise_()
-        self.isiFlashcardBelakangBg.raise_()
-        self.labelTekanFlashcardDepan.raise_()
-        self.labelTekanFlashcardBelakang.raise_()
-        self.inputTextFlashcardDepan.raise_()
-        self.inputTextFlashcardBelakangJepang.raise_()
-        self.inputTextFlashcardBelakangLatin.raise_()
-        self.labelJawabanBelakang.raise_()
-        self.inputGambarFlashcardDepan.raise_()
-        self.btnTambahFlashcard.raise_()
         self.image.raise_()
         self.jawaban.raise_()
 
@@ -563,18 +430,18 @@ class Flashcard(object):
         self.header_2.setStyleSheet(u"QLabel{\n"
 "background-color: rgb(255, 255, 255);\n"
 "}")
-        self.btnAtur = QToolButton(self.Atur)
-        self.btnAtur.setObjectName(u"toolButton")
-        self.btnAtur.setGeometry(QRect(10, 70, 361, 71))
-        self.btnAtur.setContextMenuPolicy(Qt.NoContextMenu)
-        self.btnAtur.setStyleSheet(u"QToolButton {\n"
+        self.aturButton = QToolButton(self.Atur)
+        self.aturButton.setObjectName(u"toolButton")
+        self.aturButton.setGeometry(QRect(10, 70, 361, 71))
+        self.aturButton.setContextMenuPolicy(Qt.NoContextMenu)
+        self.aturButton.setStyleSheet(u"QToolButton {\n"
 "	background: transparent;\n"
 "}")
         icon1 = QIcon()
         icon1.addFile(u"Assets/Flashcards/Rightbar/Atur Button.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.btnAtur.setIcon(icon1)
-        self.btnAtur.setIconSize(QSize(1000, 1000))
-        self.btnAtur.setCursor(QCursor(Qt.PointingHandCursor))
+        self.aturButton.setIcon(icon1)
+        self.aturButton.setIconSize(QSize(1000, 1000))
+        self.aturButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.layoutWidget = QWidget(self.frame_3)
         self.layoutWidget.setObjectName(u"layoutWidget")
         self.layoutWidget.setGeometry(QRect(30, 20, 321, 44))
@@ -794,10 +661,7 @@ class Flashcard(object):
         self.image.mousePressEvent = lambda event: self.updatePertanyaan("flashcard")
         self.jawaban_jepang.mousePressEvent = lambda event: self.updatePertanyaan("flashcard")
         self.jawaban_latin.mousePressEvent = lambda event: self.updatePertanyaan("flashcard")
-        self.btnAtur.mousePressEvent = lambda event: self.popUp()
-        self.btnKembaliPopUp.mousePressEvent = lambda event: self.popUp()
-
-        self.inputGambarFlashcardDepan.mousePressEvent = self.openFileDialog
+        self.aturButton.mousePressEvent = lambda event: self.popUp()
 
         self.header_3.raise_()
 
@@ -841,16 +705,6 @@ class Flashcard(object):
             self.btnKembaliPopUp.setVisible(False)
             self.labelFlashcardBaruPopUp.setVisible(False)
             self.lineFlashcardPopUp.setVisible(False)
-            self.isiFlashcardDepanBg.setVisible(False)
-            self.isiFlashcardBelakangBg.setVisible(False)
-            self.labelTekanFlashcardDepan.setVisible(False)
-            self.labelTekanFlashcardBelakang.setVisible(False)
-            self.inputTextFlashcardDepan.setVisible(False)
-            self.inputTextFlashcardBelakangJepang.setVisible(False)
-            self.inputTextFlashcardBelakangLatin.setVisible(False)
-            self.labelJawabanBelakang.setVisible(False)
-            self.inputGambarFlashcardDepan.setVisible(False)
-            self.btnTambahFlashcard.setVisible(False)
             self.popup_changed = False
         else:
             self.flashcardPopUp.setVisible(True)
@@ -858,24 +712,7 @@ class Flashcard(object):
             self.btnKembaliPopUp.setVisible(True)
             self.labelFlashcardBaruPopUp.setVisible(True)
             self.lineFlashcardPopUp.setVisible(True)
-            self.isiFlashcardDepanBg.setVisible(True)
-            self.isiFlashcardBelakangBg.setVisible(True)
-            self.labelTekanFlashcardDepan.setVisible(True)
-            self.labelTekanFlashcardBelakang.setVisible(True)
-            self.inputTextFlashcardDepan.setVisible(True)
-            self.inputTextFlashcardBelakangJepang.setVisible(True)
-            self.inputTextFlashcardBelakangLatin.setVisible(True)
-            self.labelJawabanBelakang.setVisible(True)
-            self.inputGambarFlashcardDepan.setVisible(True)
-            self.btnTambahFlashcard.setVisible(True)
             self.popup_changed = True
-
-    def openFileDialog(self, event):
-        options = QFileDialog.Options()
-        options |= QFileDialog.ReadOnly
-        fileName, _ = QFileDialog.getOpenFileName(None, "Select Image", "", "Images (*.png *.jpg *.jpeg *.bmp *.gif)", options=options)
-        if fileName:
-            self.inputGambarFlashcardDepan.setPixmap(QPixmap(fileName))
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
@@ -892,7 +729,7 @@ class Flashcard(object):
         self.header.setText(QCoreApplication.translate("MainWindow", u"Progress Flashcard Kamu", None))
         self.counter.setText(QCoreApplication.translate("MainWindow", u"3/10", None))
         self.header_2.setText(QCoreApplication.translate("MainWindow", u"Atur Flashcard Kamu", None))
-        self.btnAtur.setText(QCoreApplication.translate("MainWindow", u"...", None))
+        self.aturButton.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.Jepang.setText("")
         self.api.setText("")
         self.angka.setText(QCoreApplication.translate("MainWindow", u"0", None))
@@ -904,9 +741,6 @@ class Flashcard(object):
         self.comboBox.setItemText(0, QCoreApplication.translate("MainWindow", u"Kartu 1 - Apa yang sedang dia lakukan?", None))
         self.comboBox.setItemText(1, QCoreApplication.translate("MainWindow", u"Kartu 2 - Kenapa kamu melakukan hal tersebut?", None))
         self.comboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"Kartu 3 - Bagaimana cara dia melakukannya?", None))
-        self.labelTekanFlashcardDepan.setText(QCoreApplication.translate("MainWindow", u"Tekan untuk melihat jawaban", None))
-        self.labelTekanFlashcardBelakang.setText(QCoreApplication.translate("MainWindow", u"Tekan untuk melihat jawaban", None))
-        self.labelJawabanBelakang.setText(QCoreApplication.translate("MainWindow", u"Jawaban", None))
     # retranslateUi
 
 if __name__ == "__main__":
