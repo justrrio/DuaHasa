@@ -1,47 +1,46 @@
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
+                            QMetaObject, QObject, QPoint, QRect,
+                            QSize, QTime, QUrl, Qt, QPropertyAnimation, QRect, QEasingCurve, QSequentialAnimationGroup)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,QPainterPath,
-    QPalette, QPixmap, QRadialGradient, QTransform)
+                           QFont, QFontDatabase, QGradient, QIcon,
+                           QImage, QKeySequence, QLinearGradient, QPainter, QPainterPath,
+                           QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
-    QMainWindow, QProgressBar, QSizePolicy, QToolButton,
-    QVBoxLayout, QWidget)
+                               QMainWindow, QProgressBar, QSizePolicy, QToolButton,
+                               QVBoxLayout, QWidget)
+from PySide6.QtMultimedia import QSoundEffect
+import os
 
 import sys
 
+
 class CustomToolButton(QToolButton):
-    def __init__(self, parent=None, normal=None, hover=None, pressed=None):
+    def __init__(self, parent=None, normal="", pressed="", hover=""):
         super().__init__(parent)
-        self.setObjectName("Next_button_island_6")
-        self.setGeometry(30, 950, 321, 71)
-        self.setMaximumSize(1000, 1000)
-        font = QFont()
-        font.setKerning(True)
-        self.setFont(font)
-        self.setContextMenuPolicy(Qt.NoContextMenu)
-        self.setAutoFillBackground(False)
-        self.setStyleSheet("QToolButton {\n"
-                           "    border: none;                  /* Menghilangkan border */\n"
-                           "    background: transparent;       /* Membuat background transparan */\n"
-                           "    padding: 0;                    /* Menghilangkan padding */\n"
-                           "}\n")
         self.icon_normal = QIcon(normal)
         self.icon_hover = QIcon(hover)
         self.icon_pressed = QIcon(pressed)
         self.setIcon(self.icon_normal)
-        self.setIconSize(QSize(1000, 1000))
+        self.setIconSize(QSize(200, 200))
         self.setCheckable(False)
         self.setAutoRepeat(False)
         self.setToolButtonStyle(Qt.ToolButtonIconOnly)
         self.setAutoRaise(False)
+        self.setStyleSheet(u"QToolButton {\n"
+                           "    border: none;                  /* Menghilangkan border */\n"
+                           "    background: transparent;       /* Membuat background transparan */\n"
+                           "    padding: 0;                    /* Menghilangkan padding */\n"
+                           "    cursor: pointer;               /* Mengubah kursor menjadi pointer */\n"
+                           "}\n"
+                           "")
 
     def enterEvent(self, event):
+        self.setCursor(QCursor(Qt.PointingHandCursor))
         self.setIcon(self.icon_hover)
         super().enterEvent(event)
 
     def leaveEvent(self, event):
+        self.setCursor(QCursor(Qt.ArrowCursor))
         self.setIcon(self.icon_normal)
         super().leaveEvent(event)
 
@@ -53,7 +52,6 @@ class CustomToolButton(QToolButton):
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.setIcon(self.icon_hover)  # Mengembalikan ke ikon hover setelah klik
-            # Jalankan fungsi tambahan di sini jika diperlukan
         super().mouseReleaseEvent(event)
 
 class ShadowWidget(QWidget):
@@ -121,31 +119,35 @@ class dashboard(object):
 "}\n"
 "")
         # Di dalam metode setupUi
-        self.Next_button_island_6 = CustomToolButton(self.frame, "Assets/Dashboard/Left_bar/KELUAR.png",
-                                                     "Assets/Dashboard/Left_bar/KELUAR_Hover.png",
-                                                     "Assets/Dashboard/Left_bar/KELUAR PRESSED.png")
-        self.Next_button_island_6.setObjectName(u"Next_button_island_6")
-        self.Next_button_island_6.setGeometry(QRect(30, 950, 321, 71))
-        self.Next_button_island_6.setMaximumSize(QSize(1000, 1000))
+        self.Keluar_button = CustomToolButton(self.frame, 
+                                                 "Assets/Dashboard/Left_bar/KELUAR.png",
+                                                 pressed="Assets/Dashboard/Left_bar/KELUAR PRESSED.png", 
+                                                 hover="Assets/Dashboard/Left_bar/KELUAR.png")
+        self.Keluar_button.setObjectName(u"Keluar_button")
+        self.Keluar_button.setGeometry(QRect(30, 950, 321, 71))
+        self.Keluar_button.setMaximumSize(QSize(1000, 1000))
         font = QFont()
         font.setKerning(True)
-        self.Next_button_island_6.setFont(font)
-        self.Next_button_island_6.setContextMenuPolicy(Qt.NoContextMenu)
-        self.Next_button_island_6.setAutoFillBackground(False)
-        self.Next_button_island_6.setStyleSheet(u"QToolButton {\n"
+        self.Keluar_button.setFont(font)
+        self.Keluar_button.setContextMenuPolicy(Qt.NoContextMenu)
+        self.Keluar_button.setAutoFillBackground(False)
+        self.Keluar_button.setStyleSheet(u"QToolButton {\n"
         "    border: none;                  /* Menghilangkan border */\n"
         "    background: transparent;       /* Membuat background transparan */\n"
         "    padding: 0;                    /* Menghilangkan padding */\n"
+        "    cursor: pointer;               /* Mengubah kursor menjadi pointer */\n"
         "}\n"
         "")
         icon = QIcon()
         icon.addFile(u"Assets/Dashboard/Left_bar/KELUAR.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.Next_button_island_6.setIcon(icon)
-        self.Next_button_island_6.setIconSize(QSize(1000, 1000))
-        self.Next_button_island_6.setCheckable(False)
-        self.Next_button_island_6.setAutoRepeat(False)
-        self.Next_button_island_6.setToolButtonStyle(Qt.ToolButtonIconOnly)
-        self.Next_button_island_6.setAutoRaise(False)
+        self.Keluar_button.setIcon(icon)
+        self.Keluar_button.setIconSize(QSize(1000, 1000))
+        self.Keluar_button.setCheckable(False)
+        self.Keluar_button.setAutoRepeat(False)
+        self.Keluar_button.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        self.Keluar_button.setAutoRaise(False)
+
+
         self.logo = QLabel(self.frame)
         self.logo.setObjectName(u"logo")
         self.logo.setGeometry(QRect(41, 41, 300, 90))
@@ -170,6 +172,10 @@ class dashboard(object):
 "}")
         self.belajar.setPixmap(QPixmap(u"Assets/Dashboard/Left_bar/Learning_active.png"))
         self.belajar.setScaledContents(False)
+
+        #=============================================================
+        #======================= Flashcard ===========================
+        #=============================================================
         self.flashcard = QLabel(self.frame)
         self.flashcard.setObjectName(u"flashcard")
         self.flashcard.setGeometry(QRect(40, 220, 291, 60))
@@ -188,11 +194,16 @@ class dashboard(object):
 "")
         self.flashcard.setPixmap(QPixmap(u"Assets/Dashboard/Left_bar/Flashcards.png"))
         self.flashcard.setScaledContents(False)
-        self.drawing_board = QLabel(self.frame)
-        self.drawing_board.setObjectName(u"drawing_board")
-        self.drawing_board.setGeometry(QRect(40, 290, 291, 60))
-        self.drawing_board.setMaximumSize(QSize(291, 60))
-        self.drawing_board.setStyleSheet(u"QLabel {\n"
+        self.flashcard.setCursor(QCursor(Qt.PointingHandCursor))
+
+        #=============================================================
+        #======================= Multiple Choice =====================
+        #=============================================================
+        self.pilihan_ganda = QLabel(self.frame)
+        self.pilihan_ganda.setObjectName(u"pilihan_ganda")
+        self.pilihan_ganda.setGeometry(QRect(40, 290, 291, 60))
+        self.pilihan_ganda.setMaximumSize(QSize(291, 60))
+        self.pilihan_ganda.setStyleSheet(u"QLabel {\n"
 "    padding: 10px;                /* Padding dalam label */\n"
 "    border: 2px solid transparent; /* Border default transparan */\n"
 "    border-radius: 15px;          /* Border radius untuk sudut melengkung */\n"
@@ -204,7 +215,8 @@ class dashboard(object):
 "    background-color: rgba(211, 211, 211, 0.5); /* Background keabu-abuan dengan opasitas */\n"
 "}\n"
 "")
-        self.drawing_board.setPixmap(QPixmap(u"Assets/Dashboard/Left_bar/MULTIPLE_CHOICE.png"))
+        self.pilihan_ganda.setPixmap(QPixmap(u"Assets/Dashboard/Left_bar/MULTIPLE_CHOICE.png"))
+        self.pilihan_ganda.setCursor(QCursor(Qt.PointingHandCursor))
 
         self.horizontalLayout.addWidget(self.frame)
 
@@ -235,11 +247,15 @@ class dashboard(object):
         "    border-radius: 20px;\n"
         "}")
 
-
+        #=============================================================
+        #======================= Panduan Button ======================
+        #=============================================================
         self.Panduan_btn = QLabel(self.Sesi)
         self.Panduan_btn.setObjectName(u"Panduan_btn")
         self.Panduan_btn.setGeometry(QRect(710, 20, 161, 71))
         self.Panduan_btn.setPixmap(QPixmap(u"Assets/Dashboard/Sesi/Panduan.png"))
+
+        #=============================================================
         self.layoutWidget = QWidget(self.Sesi)
         self.layoutWidget.setObjectName(u"layoutWidget")
         self.layoutWidget.setGeometry(QRect(50, 20, 581, 72))
@@ -301,18 +317,26 @@ class dashboard(object):
 "}")
         self.Tangga.setPixmap(QPixmap(u"Assets/Dashboard/Island/Ladder.png"))
         self.Tangga.setScaledContents(True)
-        self.Start_btn = QToolButton(self.frame_2)
+
+        #=============================================================
+        #======================= Start Button ========================
+        #=============================================================
+        self.Start_btn = CustomToolButton(self.frame_2, 
+                                          "Assets/Dashboard/Island/Start.png",
+                                          pressed="Assets/Dashboard/Island/Start_Pressed.png", 
+                                          hover="Assets/Dashboard/Island/Start.png")
         self.Start_btn.setObjectName(u"Start_btn")
         self.Start_btn.setGeometry(QRect(560, 240, 181, 191))
         self.Start_btn.setMaximumSize(QSize(1000, 1000))
         self.Start_btn.setContextMenuPolicy(Qt.NoContextMenu)
         self.Start_btn.setAutoFillBackground(False)
         self.Start_btn.setStyleSheet(u"QToolButton {\n"
-"    border: none;                  /* Menghilangkan border */\n"
-"    background: transparent;       /* Membuat background transparan */\n"
-"    padding: 0;                    /* Menghilangkan padding */\n"
-"}\n"
-"")
+                                     "    border: none;                  /* Menghilangkan border */\n"
+                                     "    background: transparent;       /* Membuat background transparan */\n"
+                                     "    padding: 0;                    /* Menghilangkan padding */\n"
+                                     "    cursor: pointer;               /* Mengubah kursor menjadi pointer */\n"
+                                     "}\n"
+                                     "")
         icon1 = QIcon()
         icon1.addFile(u"Assets/Dashboard/Island/Start.png", QSize(), QIcon.Normal, QIcon.Off)
         self.Start_btn.setIcon(icon1)
@@ -321,6 +345,8 @@ class dashboard(object):
         self.Start_btn.setAutoRepeat(False)
         self.Start_btn.setToolButtonStyle(Qt.ToolButtonIconOnly)
         self.Start_btn.setAutoRaise(False)
+        
+        #=============================================================
         self.Next_button_island = QToolButton(self.frame_2)
         self.Next_button_island.setObjectName(u"Next_button_island")
         self.Next_button_island.setGeometry(QRect(490, 380, 71, 71))
@@ -361,19 +387,30 @@ class dashboard(object):
         self.Next_button_island_2.setAutoRepeat(False)
         self.Next_button_island_2.setToolButtonStyle(Qt.ToolButtonIconOnly)
         self.Next_button_island_2.setAutoRaise(False)
-        self.Next_button_island_3 = QToolButton(self.frame_2)
+
+        #=============================================================
+        #======================= Chest Button ========================
+        #=============================================================
+        # Inisialisasi CustomToolButton
+        self.Next_button_island_3 = CustomToolButton(self.frame_2, 
+                                                        "Assets/Dashboard/Island/Chest.png",
+                                                        pressed="Assets/Dashboard/Island/Chest_Pressed.png", 
+                                                        hover="Assets/Dashboard/Island/Chest.png")
         self.Next_button_island_3.setObjectName(u"Next_button_island_3")
         self.Next_button_island_3.setGeometry(QRect(480, 700, 100, 80))
         self.Next_button_island_3.setMaximumSize(QSize(100, 100))
+        font = QFont()
+        font.setKerning(True)
         self.Next_button_island_3.setFont(font)
         self.Next_button_island_3.setContextMenuPolicy(Qt.NoContextMenu)
         self.Next_button_island_3.setAutoFillBackground(False)
         self.Next_button_island_3.setStyleSheet(u"QToolButton {\n"
-"    border: none;                  /* Menghilangkan border */\n"
-"    background: transparent;       /* Membuat background transparan */\n"
-"    padding: 0;                    /* Menghilangkan padding */\n"
-"}\n"
-"")
+        "    border: none;                  /* Menghilangkan border */\n"
+        "    background: transparent;       /* Membuat background transparan */\n"
+        "    padding: 0;                    /* Menghilangkan padding */\n"
+        "    cursor: pointer;               /* Mengubah kursor menjadi pointer */\n"
+        "}\n"
+        "")
         icon3 = QIcon()
         icon3.addFile(u"Assets/Dashboard/Island/Chest.png", QSize(), QIcon.Normal, QIcon.Off)
         self.Next_button_island_3.setIcon(icon3)
@@ -382,6 +419,7 @@ class dashboard(object):
         self.Next_button_island_3.setAutoRepeat(False)
         self.Next_button_island_3.setToolButtonStyle(Qt.ToolButtonIconOnly)
         self.Next_button_island_3.setAutoRaise(False)
+
         self.Next_button_island_4 = QToolButton(self.frame_2)
         self.Next_button_island_4.setObjectName(u"Next_button_island_4")
         self.Next_button_island_4.setGeometry(QRect(580, 780, 70, 70))
@@ -475,6 +513,9 @@ class dashboard(object):
 "background-color: rgb(255, 255, 255);\n"
 "color: rgb(0, 0, 0);\n"  # Mengatur warna teks menjadi hitam
 "}")
+        #=============================================================
+        #======================= Progress Bar ========================
+        #=============================================================
         self.progressBar = QProgressBar(self.Progres)
         self.progressBar.setObjectName(u"progressBar")
         self.progressBar.setGeometry(QRect(20, 90, 271, 21))
@@ -492,6 +533,10 @@ class dashboard(object):
 "    margin: 0px;  /* Mengatur margin untuk jarak antar chunk */\n"
 "}")
         self.progressBar.setValue(24)
+
+        #=============================================================
+        #======================= Count Materi ========================
+        #=============================================================
         self.Count_materi = QLabel(self.Progres)
         self.Count_materi.setObjectName(u"Count_materi")
         self.Count_materi.setGeometry(QRect(300, 80, 61, 41))
@@ -500,6 +545,9 @@ class dashboard(object):
 "background-color: rgb(255, 255, 255);\n"
 "color: rgb(0, 0, 0);\n"
 "}")
+        #=============================================================
+        #======================= Motivasi ============================
+        #=============================================================
         self.motivasi = QLabel(self.Progres)
         self.motivasi.setObjectName(u"motivasi")
         self.motivasi.setGeometry(QRect(30, 140, 311, 31))
@@ -511,16 +559,27 @@ class dashboard(object):
 "background-color: rgb(255, 255, 255);\n"
 "color: rgb(0, 0, 0);\n"
 "}")
-        self.label_17 = QLabel(self.Progres)
-        self.label_17.setObjectName(u"label_17")
-        self.label_17.setGeometry(QRect(30, 180, 321, 51))
-        self.label_17.setStyleSheet(u"QLabel {\n"
-"    background-color: transparent;  /* Membuat background transparan */\n"
-"}\n"
-"")
-        self.label_17.setPixmap(QPixmap(u"Assets/Dashboard/Right_bar/Button_Belajar.png"))
+        #=============================================================
+        #======================= Belajar Button ======================
+        #=============================================================
+        self.Belajar_button = CustomToolButton(self.Progres, 
+                                               "Assets/Dashboard/Right_bar/Button_Belajar.png",
+                                               pressed="Assets/Dashboard/Right_bar/Button_Belajar_Pressed.png",
+                                               hover="Assets/Dashboard/Right_bar/Button_Belajar.png")
+        self.Belajar_button.setObjectName(u"Belajar_button")
+        self.Belajar_button.setGeometry(QRect(30, 180, 321, 51))
+        self.Belajar_button.setStyleSheet(u"QToolButton {\n"
+                                          "    background-color: transparent;  /* Membuat background transparan */\n"
+                                          "}\n"
+                                          "")
+        self.Belajar_button.setIconSize(QSize(321, 51))
+        self.Belajar_button.setCheckable(False)
+        self.Belajar_button.setAutoRepeat(False)
+        self.Belajar_button.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        self.Belajar_button.setAutoRaise(False)
+
         self.progressBar.raise_()
-        self.label_17.raise_()
+        self.Belajar_button.raise_()
         self.Progress_belajar.raise_()
         self.motivasi.raise_()
         self.Count_materi.raise_()
@@ -560,15 +619,27 @@ class dashboard(object):
 "background-color: rgb(255, 255, 255);\n"
 "color: rgb(0, 0, 0);\n"
 "}")
-        self.b_profile = QLabel(self.Profile)
-        self.b_profile.setObjectName(u"b_profile")
-        self.b_profile.setGeometry(QRect(40, 70, 311, 51))
-        self.b_profile.setStyleSheet(u"QLabel {\n"
-"    background-color: transparent;  /* Membuat background transparan */\n"
-"}\n"
-"")
-        self.b_profile.setPixmap(QPixmap(u"Assets/Dashboard/Right_bar/Profile.png"))
-        self.b_profile.setScaledContents(True)
+        #=============================================================
+        #======================= Profile Button ======================
+        #=============================================================
+        self.Profile_button = CustomToolButton(self.Profile, 
+                                       "Assets/Dashboard/Right_bar/Profile.png",
+                                       pressed="Assets/Dashboard/Right_bar/Profile_pressed.png", 
+                                       hover="Assets/Dashboard/Right_bar/Profile.png")
+        self.Profile_button.setObjectName(u"Profile_button")
+        self.Profile_button.setGeometry(QRect(40, 70, 311, 51))
+        self.Profile_button.setStyleSheet(u"QToolButton {\n"
+                                        "    background-color: transparent;  /* Membuat background transparan */\n"
+                                        "}\n"
+                                        "")
+        self.Profile_button.setIconSize(QSize(311, 51))
+        self.Profile_button.setCheckable(False)
+        self.Profile_button.setAutoRepeat(False)
+        self.Profile_button.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        self.Profile_button.setAutoRaise(False)
+
+
+        #=============================================================
         self.layoutWidget1 = QWidget(self.frame_3)
         self.layoutWidget1.setObjectName(u"layoutWidget1")
         self.layoutWidget1.setGeometry(QRect(30, 20, 321, 44))
@@ -650,6 +721,38 @@ class dashboard(object):
         self.Stars_count.setStyleSheet(u"QLabel#Stars_count{\n"
 "color : rgb(85, 153, 255);\n"
 "}")
+        #=============================================================
+        #======================= Fungsi_kode =========================
+        #=============================================================
+        
+        #=============================================================
+        #====================== Music Play ===========================
+        #=============================================================
+         # Path to the music file
+        music_file = "Assets/Dashboard/Sound/K.K.Slider_Dream_Animal_Crossing_New_Horizons_(OST).wav"
+        
+        # Check if the music file exists
+        if not os.path.exists(music_file):
+            print(f"Error: Music file '{music_file}' does not exist")
+        else:
+            print(f"Playing music file '{music_file}'")
+            self.sound_effect = QSoundEffect()
+            self.sound_effect.setSource(QUrl.fromLocalFile(music_file))
+            self.sound_effect.setLoopCount(-2)  # Infinite loop
+            self.sound_effect.setVolume(1)  # Set the volume (0.0 to 1.0)
+            self.sound_effect.play()
+        
+        #=============================================================
+        #=================== Animasi Bounce Start ====================
+        #=============================================================
+
+        # Inisialisasi animasi
+        self.bounce_animation = self.create_bounce_animation(self.Start_btn)
+
+        # Hubungkan animasi dengan event tombol start
+        self.Belajar_button.clicked.connect(self.bounce_animation.start)
+
+        #=============================================================
 
         self.horizontalLayout_4.addWidget(self.Stars_count)
 
@@ -668,11 +771,11 @@ class dashboard(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"DuaHasa", None))
-        self.Next_button_island_6.setText("")
+        self.Keluar_button.setText("")
         self.logo.setText(QCoreApplication.translate("MainWindow", u"duahasa", None))
         self.belajar.setText("")
         self.flashcard.setText("")
-        self.drawing_board.setText("")
+        self.pilihan_ganda.setText("")
         self.Panduan_btn.setText("")
         self.Back_Button.setText("")
         self.Text_sesi.setText(QCoreApplication.translate("MainWindow", u"TEXT SESI", None))
@@ -690,10 +793,10 @@ class dashboard(object):
         self.Progress_belajar.setText(QCoreApplication.translate("MainWindow", u"Progress Belajar Kamu", None))
         self.Count_materi.setText(QCoreApplication.translate("MainWindow", u"3/10", None))
         self.motivasi.setText(QCoreApplication.translate("MainWindow", u"Ayo tingkatkan lagi belajarnya!", None))
-        self.label_17.setText("")
+        self.Belajar_button.setText("")
         self.karakter.setText("")
         self.hd_iklan_2.setText(QCoreApplication.translate("MainWindow", u"Atur Profile Kamu!", None))
-        self.b_profile.setText("")
+        self.Profile_button.setText("")
         self.Jepang.setText("")
         self.api.setText("")
         self.angka.setText(QCoreApplication.translate("MainWindow", u"0", None))
@@ -702,6 +805,27 @@ class dashboard(object):
         self.Star.setText("")
         self.Stars_count.setText(QCoreApplication.translate("MainWindow", u"5", None))
     # retranslateUi
+
+    def create_bounce_animation(self, button):
+        animation_group = QSequentialAnimationGroup()
+        start_geometry = button.geometry()
+        for i in range(10):
+            bounce_up = QPropertyAnimation(button, b"geometry")
+            bounce_up.setDuration(100 - i)
+            bounce_up.setStartValue(start_geometry)
+            bounce_up.setEndValue(QRect(start_geometry.x(), start_geometry.y() - 10, start_geometry.width(), start_geometry.height()))
+            bounce_up.setEasingCurve(QEasingCurve.OutBounce)
+
+            bounce_down = QPropertyAnimation(button, b"geometry")
+            bounce_down.setDuration(100 - i * 5)
+            bounce_down.setStartValue(QRect(start_geometry.x(), start_geometry.y() - 10, start_geometry.width(), start_geometry.height()))
+            bounce_down.setEndValue(start_geometry)
+            bounce_down.setEasingCurve(QEasingCurve.InBounce)
+
+            animation_group.addAnimation(bounce_up)
+            animation_group.addAnimation(bounce_down)
+        return animation_group
+
 
 if __name__ == "__main__":
         app = QApplication(sys.argv)
