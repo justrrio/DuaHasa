@@ -68,7 +68,7 @@ class AutoResizeLabel(QLabel):
         self.setFont(font)
 
 class Flashcard(object):
-    def setupUi(self, MainWindow):
+    def setupUi(self, MainWindow):        
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(1920, 1080)
@@ -375,7 +375,7 @@ class Flashcard(object):
 
         self.btnTambahFlashcard = QLabel(self.frame_2)
         self.btnTambahFlashcard.setObjectName(u"btnTambahFlashcard")
-        self.btnTambahFlashcard.setGeometry(QRect(240, 750, 311, 61))
+        self.btnTambahFlashcard.setGeometry(QRect(300, 750, 311, 61))
         self.btnTambahFlashcard.setPixmap(QPixmap(u"Assets/Flashcards/Middlebar/Tambah Flashcard.png"))
         self.btnTambahFlashcard.setScaledContents(True)
         self.btnTambahFlashcard.setCursor(QCursor(Qt.PointingHandCursor))
@@ -433,21 +433,21 @@ class Flashcard(object):
         self.image.setPixmap(QPixmap(u"Assets/Flashcards/Middlebar/image v2.png"))
         self.image.setScaledContents(False)
         self.image.setWordWrap(True)
-        self.jawaban = QLabel(self.Flashcard)
-        self.jawaban.setObjectName(u"jawaban")
-        self.jawaban.setGeometry(QRect(180, 700, 401, 111))
-        self.jawaban.setMaximumSize(QSize(500, 200))
+        self.labelTekanFlashcard = QLabel(self.Flashcard)
+        self.labelTekanFlashcard.setObjectName(u"labelTekanFlashcard")
+        self.labelTekanFlashcard.setGeometry(QRect(180, 700, 401, 111))
+        self.labelTekanFlashcard.setMaximumSize(QSize(500, 200))
         font3 = QFont()
         font3.setFamilies([u"Jellee"])
         font3.setPointSize(20)
-        self.jawaban.setFont(font3)
-        self.jawaban.setCursor(QCursor(Qt.PointingHandCursor))
-        self.jawaban.setStyleSheet(u"QLabel {\n"
+        self.labelTekanFlashcard.setFont(font3)
+        self.labelTekanFlashcard.setCursor(QCursor(Qt.PointingHandCursor))
+        self.labelTekanFlashcard.setStyleSheet(u"QLabel {\n"
 "    background-color: transparent; /* Background transparan */\n"
 "	color: #15387C;\n"
 "}")
-        self.jawaban.setScaledContents(False)
-        self.jawaban.setWordWrap(True)
+        self.labelTekanFlashcard.setScaledContents(False)
+        self.labelTekanFlashcard.setWordWrap(True)
         self.pertanyaan_2 = QLabel(self.Flashcard)
         self.pertanyaan_2.setObjectName(u"pertanyaan_2")
         self.pertanyaan_2.setGeometry(QRect(40, 10, 681, 881))
@@ -479,7 +479,7 @@ class Flashcard(object):
         self.inputGambarFlashcardDepan.raise_()
         self.btnTambahFlashcard.raise_()
         self.image.raise_()
-        self.jawaban.raise_()
+        self.labelTekanFlashcard.raise_()
 
         self.horizontalLayout.addWidget(self.frame_2)
 
@@ -744,9 +744,13 @@ class Flashcard(object):
         self.frame_4.setStyleSheet(u"QFrame {\n"
 "    background: transparent;\n"
 "    padding: 0px;\n"
-"    margin: 0px;\n"
 "    border: 0px;\n"
-"}")
+"    margin-bottom: 80px;\n"
+"}"
+"QLabel {\n"
+"    margin: 0px;\n"
+"}"
+)
         self.frame_4.setFrameShape(QFrame.StyledPanel)
         self.frame_4.setFrameShadow(QFrame.Raised)
         self.frame_4.hide()
@@ -773,9 +777,9 @@ class Flashcard(object):
         self.jawaban_latin.setText("Kare wa tabete iru")
         self.jawaban_latin.setCursor(QCursor(Qt.PointingHandCursor))
 
-        # Tambahkan label ke layout
+        # Tambahkan label ke layout dengan margin khusus untuk jawaban_latin
         self.frame_4_layout.addWidget(self.jawaban_jepang, alignment=Qt.AlignCenter)
-        self.frame_4_layout.addWidget(self.jawaban_latin, alignment=Qt.AlignCenter)
+        self.frame_4_layout.addWidget(self.jawaban_latin, alignment=Qt.AlignTop)
 
         # Sembunyikan label saat inisialisasi
         self.jawaban_jepang.hide()
@@ -794,6 +798,7 @@ class Flashcard(object):
         self.image.mousePressEvent = lambda event: self.updatePertanyaan("flashcard")
         self.jawaban_jepang.mousePressEvent = lambda event: self.updatePertanyaan("flashcard")
         self.jawaban_latin.mousePressEvent = lambda event: self.updatePertanyaan("flashcard")
+        self.labelTekanFlashcard.mousePressEvent = lambda event: self.updatePertanyaan("flashcard")
         self.btnAtur.mousePressEvent = lambda event: self.popUp()
         self.btnKembaliPopUp.mousePressEvent = lambda event: self.popUp()
 
@@ -887,7 +892,7 @@ class Flashcard(object):
         self.pertanyaan.setText(QCoreApplication.translate("MainWindow", u"Apa yang sedang dia lakukan?", None))
         self.background.setText("")
         self.image.setText("")
-        self.jawaban.setText(QCoreApplication.translate("MainWindow", u"Tekan untuk melihat jawaban", None))
+        self.labelTekanFlashcard.setText(QCoreApplication.translate("MainWindow", u"Tekan untuk melihat jawaban", None))
         self.pertanyaan_2.setText("")
         self.header.setText(QCoreApplication.translate("MainWindow", u"Progress Flashcard Kamu", None))
         self.counter.setText(QCoreApplication.translate("MainWindow", u"3/10", None))
@@ -914,5 +919,4 @@ if __name__ == "__main__":
     MainWindow = QMainWindow()
     ui = Flashcard()
     ui.setupUi(MainWindow)
-    MainWindow.show()
     sys.exit(app.exec())
