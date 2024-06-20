@@ -833,14 +833,14 @@ class Flashcard(QMainWindow):
         if " - " in selected_text:
                 result_text = selected_text.split(" - ", 1)[1]
         else:
-                result_text = "Pertanyaan tidak valid"
+                result_text = "Pertanyaan"
 
         # Mengambil data flashcard dari JSON
         folder_path = os.path.join(os.getcwd(), "Flashcards")
         try:
                 index = selected_text.split(" ")[1]
         except IndexError:
-                QMessageBox.warning(None, "Warning", "Format pertanyaan tidak valid.")
+                # QMessageBox.warning(None, "Warning", "Format pertanyaan tidak valid.")
                 return
 
         print("updatePertanyaan(index):", index)
@@ -859,7 +859,7 @@ class Flashcard(QMainWindow):
                         jawaban_jepang = data.get("jawaban_jepang", "")
                         jawaban_latin = data.get("jawaban_latin", "")
         else:
-                QMessageBox.warning(None, "Warning", f"Flashcard {index} tidak ditemukan.")
+                # QMessageBox.warning(None, "Warning", f"Flashcard {index} tidak ditemukan.")
                 # Atur gambar ke gambar not found jika file JSON tidak ditemukan
                 gambar_path = "Assets/Flashcards/Middlebar/Tidak Ada Gambar.png"
 
