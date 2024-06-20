@@ -126,7 +126,7 @@ class ShadowWidget(QWidget):
                 content_path.addRoundedRect(rect.adjusted(0, 0, -10, -10), 20, 20)
                 painter.fillPath(content_path, self.palette().window().color())
 
-class dashboard(QMainWindow):
+class Dashboard(QMainWindow):
         def __init__(self):
                 super().__init__()
                 self.setupUi(self)
@@ -191,6 +191,8 @@ class dashboard(QMainWindow):
                 self.Keluar_button.setAutoRepeat(False)
                 self.Keluar_button.setToolButtonStyle(Qt.ToolButtonIconOnly)
                 self.Keluar_button.setAutoRaise(False)
+                self.Keluar_button.setCheckable(True)
+                self.Keluar_button.clicked.connect(MainWindow.close)
 
 
                 self.logo = QLabel(self.Left_bar)
@@ -1306,14 +1308,10 @@ class dashboard(QMainWindow):
         #=============================================================
         
         def show_flashcard(self, event):
-                try:
-                        flashcard_window = QMainWindow()
-                        self.flashcard = Flashcard()
-                        self.flashcard.setupUi(flashcard_window)
-                        flashcard_window.show()
-                except Exception as e:
-                        print(f"Error occurred: {e}")
-
+                self.flashcard_window = Flashcard()
+                self.flashcard_window.setupUi(self.flashcard_window)
+                self.flashcard_window.show()
+                
 class pagePG(QFrame):
         def __init__(self, parent=None):
                 super().__init__(parent)
@@ -1437,7 +1435,7 @@ class pagePG(QFrame):
 if __name__ == "__main__":
         app = QApplication(sys.argv)
         MainWindow = QMainWindow()
-        ui = dashboard()
+        ui = Dashboard()
         ui.setupUi(MainWindow)
         MainWindow.show()
         sys.exit(app.exec())
