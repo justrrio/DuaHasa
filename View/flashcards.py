@@ -394,7 +394,9 @@ class Flashcard(QMainWindow):
         self.btnTambahFlashcard.setVisible(False)
 
 ###############################################################################
+
 ############################ FLASHCARD SYSTEM #################################
+
 ###############################################################################
 
         self.Flashcard = QWidget(self.frame_2)
@@ -467,12 +469,26 @@ class Flashcard(QMainWindow):
 "    background-color: transparent; /* Background transparan */\n"
 "	color: white;\n"
 "}")
+        
+        self.btnTerjawab = QLabel(self.frame_2)
+        self.btnTerjawab.setObjectName(u"btnTerjawab")
+        self.btnTerjawab.setGeometry(QRect(290, 600, 501, 111))
+        self.btnTerjawab.setAlignment(Qt.AlignCenter)
+        self.btnTerjawab.setMaximumSize(QSize(600, 400))
+        self.btnTerjawab.setPixmap(QPixmap(u"Assets/Flashcards/Middlebar/Belum Terjawab.png"))
+        self.btnTerjawab.setCursor(QCursor(Qt.PointingHandCursor))
+        self.btnTerjawab.setStyleSheet(u"QLabel {\n"
+"    background-color: transparent; /* Background transparan */\n"
+"}")
+        self.btnTerjawab.setScaledContents(False)
+        
         self.pertanyaan_2.setPixmap(QPixmap(u"Assets/Flashcards/Middlebar/Dekorasi.png"))
         self.pertanyaan_2.setScaledContents(True)
         self.pertanyaan_2.setWordWrap(True)
         self.pertanyaan_2.raise_()
         self.background.raise_()
         self.pertanyaan.raise_()
+        self.btnTerjawab.raise_()
         self.flashcardBgPopUp.raise_()
         self.flashcardPopUp.raise_()
         self.btnKembaliPopUp.raise_()
@@ -552,7 +568,9 @@ class Flashcard(QMainWindow):
 "	margin: 2px;\n"
 "}\n"
 "")
-        self.progressBar.setValue(24)
+        # self.progressBar.setValue(24)
+        self.updateProgressBar()
+        
         self.Atur = QWidget(self.frame_3)
         self.Atur.setObjectName(u"Atur")
         self.Atur.setGeometry(QRect(10, 480, 381, 151))
@@ -777,7 +795,7 @@ class Flashcard(QMainWindow):
         self.jawaban_jepang.setStyleSheet("background-color: transparent; color: white;")
         self.jawaban_jepang.setFont(QFont("Jellee", 30))
         self.jawaban_jepang.setAlignment(Qt.AlignCenter)
-        self.jawaban_jepang.setText("彼は食べている")
+        # self.jawaban_jepang.setText("彼は食べている")
         self.jawaban_jepang.setCursor(QCursor(Qt.PointingHandCursor))
 
         self.jawaban_latin = QLabel(self.frame_4)
@@ -785,9 +803,9 @@ class Flashcard(QMainWindow):
         self.jawaban_latin.setStyleSheet("background-color: transparent; color: white;")
         self.jawaban_latin.setFont(QFont("Jellee", 30))
         self.jawaban_latin.setAlignment(Qt.AlignCenter)
-        self.jawaban_latin.setText("Kare wa tabete iru")
+        # self.jawaban_latin.setText("Kare wa tabete iru")
         self.jawaban_latin.setCursor(QCursor(Qt.PointingHandCursor))
-
+        
         # Tambahkan label ke layout dengan margin khusus untuk jawaban_latin
         self.frame_4_layout.addWidget(self.jawaban_jepang, alignment=Qt.AlignCenter)
         self.frame_4_layout.addWidget(self.jawaban_latin, alignment=Qt.AlignTop)
@@ -795,6 +813,7 @@ class Flashcard(QMainWindow):
         # Sembunyikan label saat inisialisasi
         self.jawaban_jepang.hide()
         self.jawaban_latin.hide()
+        self.btnTerjawab.hide()
 
         # Setup opacity effect for frame_4
         self.opacity_effect = QGraphicsOpacityEffect()
@@ -809,10 +828,12 @@ class Flashcard(QMainWindow):
         self.image.mousePressEvent = lambda event: self.updatePertanyaan("flashcard")
         self.jawaban_jepang.mousePressEvent = lambda event: self.updatePertanyaan("flashcard")
         self.jawaban_latin.mousePressEvent = lambda event: self.updatePertanyaan("flashcard")
+        self.btnTerjawab.mousePressEvent = lambda event: self.updatePertanyaan("flashcard")
         self.labelTekanFlashcard.mousePressEvent = lambda event: self.updatePertanyaan("flashcard")
         self.btnAtur.mousePressEvent = lambda event: self.popUp()
         self.btnKembaliPopUp.mousePressEvent = lambda event: self.popUp()
         self.btnTambahFlashcard.mousePressEvent = lambda event: self.tambahFlashcard()
+        self.btnTerjawab.mousePressEvent = lambda event: self.updateBtnTerjawab()
 
         self.inputGambarFlashcardDepan.mousePressEvent = self.openFileDialog
 
@@ -849,6 +870,7 @@ class Flashcard(QMainWindow):
 
         # Inisialisasi gambar_path, jawaban_jepang, dan jawaban_latin dengan nilai default
         gambar_path = ""
+        terjawab = False
         jawaban_jepang = ""
         jawaban_latin = ""
 
@@ -858,6 +880,7 @@ class Flashcard(QMainWindow):
                         gambar_path = data.get("gambar", "")
                         jawaban_jepang = data.get("jawaban_jepang", "")
                         jawaban_latin = data.get("jawaban_latin", "")
+                        terjawab = data.get("terjawab", False)
         else:
                 # QMessageBox.warning(None, "Warning", f"Flashcard {index} tidak ditemukan.")
                 # Atur gambar ke gambar not found jika file JSON tidak ditemukan
@@ -880,6 +903,7 @@ class Flashcard(QMainWindow):
                 self.frame_4.show()
                 self.jawaban_jepang.show()
                 self.jawaban_latin.show()
+                self.btnTerjawab.show()
                 # Start opacity animation
                 self.opacity_animation.setStartValue(0)
                 self.opacity_animation.setEndValue(1)
@@ -894,9 +918,43 @@ class Flashcard(QMainWindow):
                 self.frame_4.hide()
                 self.jawaban_jepang.hide()
                 self.jawaban_latin.hide()
+                self.btnTerjawab.hide()
 
         self.pertanyaan.setText(result_text)
+        # Update pixmap btnTerjawab
+        if terjawab:
+                self.btnTerjawab.setPixmap(QPixmap(u"Assets/Flashcards/Middlebar/Sudah Terjawab.png"))
+        else:
+                self.btnTerjawab.setPixmap(QPixmap(u"Assets/Flashcards/Middlebar/Belum Terjawab.png"))
+                
+    def updateProgressBar(self):
+        print("UPDATEEEEEEE")
+        folder_path = os.path.join(os.getcwd(), "Flashcards")
+        if not os.path.exists(folder_path):
+                self.progressBar.setValue(0)
+                self.counter.setText("0/0")
+                return
 
+        flashcard_files = [f for f in os.listdir(folder_path) if f.endswith('.json')]
+        total_flashcards = len(flashcard_files)
+        if total_flashcards == 0:
+                self.progressBar.setValue(0)
+                self.counter.setText("0/0")
+                return
+
+        answered_flashcards = 0
+        for flashcard_file in flashcard_files:
+                file_path = os.path.join(folder_path, flashcard_file)
+                with open(file_path, 'r', encoding='utf-8') as file:
+                        data = json.load(file)
+                        if data.get("terjawab", False):
+                                answered_flashcards += 1
+
+        progress_value = (answered_flashcards / total_flashcards) * 100
+        self.progressBar.setValue(progress_value)
+        self.counter.setText(f"{answered_flashcards}/{total_flashcards}")
+
+        
     def popUp(self):
         if self.popup_changed:
             self.flashcardPopUp.setVisible(False)
@@ -961,7 +1019,8 @@ class Flashcard(QMainWindow):
                 "pertanyaan": pertanyaan,
                 "gambar": gambar,
                 "jawaban_jepang": jawaban_jepang,
-                "jawaban_latin": jawaban_latin
+                "jawaban_latin": jawaban_latin,
+                "terjawab": False
         }
 
         folder_path = "Flashcards"
@@ -989,7 +1048,10 @@ class Flashcard(QMainWindow):
         msgBox.setStandardButtons(QMessageBox.Ok)
         msgBox.buttonClicked.connect(self.popUp)
         msgBox.exec_()
-        
+
+        # Update progress bar dan counter
+        self.updateProgressBar()        
+
     def populateComboBox(self):
                 folder_path = os.path.join(os.getcwd(), "Flashcards")
                 
@@ -1034,6 +1096,42 @@ class Flashcard(QMainWindow):
                                 self.image.setPixmap(QPixmap(gambar_path))
                                 return  # Stop after loading the first valid image
         self.image.setPixmap(QPixmap("Assets/Flashcards/Middlebar/Tidak Ada Gambar.png"))
+        
+        # Panggil fungsi ini setiap kali updateBtnTerjawab terpanggil atau flashcard ditambahkan
+    def updateBtnTerjawab(self):
+        # Mengambil data flashcard dari JSON
+        selected_text = self.comboBox.currentText()
+        index = selected_text.split(" ")[1]
+        folder_path = os.path.join(os.getcwd(), "Flashcards")
+        file_path = os.path.join(folder_path, f"{index}_flashcard.json")
+        print("MASUK UPDATE")
+
+        if os.path.exists(file_path):
+                with open(file_path, 'r', encoding='utf-8') as file:
+                        data = json.load(file)
+
+                # Periksa nilai "terjawab"
+                terjawab = data.get("terjawab", False)
+
+                # Toggle nilai "terjawab" dan set pixmap berdasarkan nilai baru
+                if terjawab:
+                        data['terjawab'] = False
+                        self.btnTerjawab.setPixmap(QPixmap(u"Assets/Flashcards/Middlebar/Belum Terjawab.png"))
+                else:
+                        data['terjawab'] = True
+                        self.btnTerjawab.setPixmap(QPixmap(u"Assets/Flashcards/Middlebar/Sudah Terjawab.png"))
+
+                # Simpan kembali data yang diperbarui ke dalam file JSON
+                with open(file_path, 'w', encoding='utf-8') as file:
+                        json.dump(data, file, ensure_ascii=False, indent=4)
+
+                # Update progress bar dan counter
+                self.updateProgressBar()
+
+                # QMessageBox.information(None, "Success", "Status terjawab berhasil diperbarui!")
+        else:
+                # QMessageBox.warning(None, "Error", "File flashcard tidak ditemukan.")
+                return
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
@@ -1048,7 +1146,7 @@ class Flashcard(QMainWindow):
         self.labelTekanFlashcard.setText(QCoreApplication.translate("MainWindow", u"Tekan untuk melihat jawaban", None))
         self.pertanyaan_2.setText("")
         self.header.setText(QCoreApplication.translate("MainWindow", u"Progress Flashcard Kamu", None))
-        self.counter.setText(QCoreApplication.translate("MainWindow", u"3/10", None))
+        # self.counter.setText(QCoreApplication.translate("MainWindow", u"", None))
         self.header_2.setText(QCoreApplication.translate("MainWindow", u"Atur Flashcard Kamu", None))
         self.btnAtur.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.Jepang.setText("")
