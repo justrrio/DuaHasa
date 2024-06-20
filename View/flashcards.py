@@ -382,7 +382,7 @@ class Flashcard(QMainWindow):
         self.btnTambahFlashcard = QLabel(self.frame_2)
         self.btnTambahFlashcard.setObjectName(u"btnTambahFlashcard")
         # self.btnTambahFlashcard.setGeometry(QRect(500, 750, 311, 61))
-        self.btnTambahFlashcard.setGeometry(QRect(500, 300, 311, 61))
+        self.btnTambahFlashcard.setGeometry(QRect(400, 500, 311, 61))
         self.btnTambahFlashcard.setPixmap(QPixmap(u"Assets/Flashcards/Middlebar/Tambah Flashcard.png"))
         self.btnTambahFlashcard.setScaledContents(True)
         self.btnTambahFlashcard.setCursor(QCursor(Qt.PointingHandCursor))
@@ -472,7 +472,7 @@ class Flashcard(QMainWindow):
         
         self.btnTerjawab = QLabel(self.frame_2)
         self.btnTerjawab.setObjectName(u"btnTerjawab")
-        self.btnTerjawab.setGeometry(QRect(290, 600, 501, 111))
+        self.btnTerjawab.setGeometry(QRect(290, 800, 501, 111))
         self.btnTerjawab.setAlignment(Qt.AlignCenter)
         self.btnTerjawab.setMaximumSize(QSize(600, 400))
         self.btnTerjawab.setPixmap(QPixmap(u"Assets/Flashcards/Middlebar/Belum Terjawab.png"))
