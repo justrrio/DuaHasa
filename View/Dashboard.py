@@ -1311,13 +1311,13 @@ class Dashboard(QMainWindow):
                 self.flashcard_window = Flashcard()
                 self.flashcard_window.setupUi(self.flashcard_window)
                 self.flashcard_window.show()
-                self.close()
+                self.destroy()
                         
         def show_Pg(self):
                 self.Pg_window = Multiplechoice()
                 self.Pg_window.setupUi(self.Pg_window)
                 self.Pg_window.show()
-                self.close()
+                self.destroy()
 
 if __name__ == "__main__":
         app = QApplication(sys.argv)
