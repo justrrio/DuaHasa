@@ -126,7 +126,11 @@ class ShadowWidget(QWidget):
                 content_path.addRoundedRect(rect.adjusted(0, 0, -10, -10), 20, 20)
                 painter.fillPath(content_path, self.palette().window().color())
 
-class dashboard(object):
+class dashboard(QMainWindow):
+        def __init__(self):
+                super().__init__()
+                self.setupUi(self)
+
         def setupUi(self, MainWindow):
                 if not MainWindow.objectName():
                         MainWindow.setObjectName(u"MainWindow")
@@ -1077,6 +1081,7 @@ class dashboard(object):
                 self.Pop_up_bacground_2.setObjectName(u"Pop_up_bacground_2")
                 self.Pop_up_bacground_2.setGeometry(QRect(-1, -1, 1501, 1061))
                 self.Pop_up_bacground_2.setStyleSheet(u" background-color: rgba(0, 0, 0, 128); /* Black background with 50% opacity */")
+                self.Pop_up_bacground_2.setVisible(False)
                 self.Pop_up_mulai = QWidget(self.Pop_up_bacground_2)
                 self.Pop_up_mulai.setObjectName(u"Pop_up_mulai")
                 self.Pop_up_mulai.setEnabled(True)
@@ -1299,9 +1304,15 @@ class dashboard(object):
         #=============================================================
         #====================== Show Flashcard =======================
         #=============================================================
-        def show_flashcard(self):
-                self.flashcard = Flashcard(self.centralwidget)
-                self.flashcard.setupFrame()
+        
+        def show_flashcard(self, event):
+                try:
+                        flashcard_window = QMainWindow()
+                        self.flashcard = Flashcard()
+                        self.flashcard.setupUi(flashcard_window)
+                        flashcard_window.show()
+                except Exception as e:
+                        print(f"Error occurred: {e}")
 
 class pagePG(QFrame):
         def __init__(self, parent=None):
