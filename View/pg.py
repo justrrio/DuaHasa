@@ -20,11 +20,11 @@ from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
 
 import sys
 
-class Ui_MainWindow(object):
+class Multiplechoice(QMainWindow):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1366, 768)
+        MainWindow.resize(1920, 1080)
         MainWindow.setMaximumSize(QSize(1920, 1200))
         MainWindow.setStyleSheet(u"QMainWindow {\n"
 "    background-color: #EAEAEA;\n"
@@ -537,10 +537,10 @@ class Ui_MainWindow(object):
         self.Stars_count.setText(QCoreApplication.translate("MainWindow", u"5", None))
     # retranslateUi
 
-if __name__ == "__main__":
-        app = QApplication(sys.argv)
-        MainWindow = QMainWindow()
-        ui = Ui_MainWindow()
-        ui.setupUi(MainWindow)
-        MainWindow.show()
-        sys.exit(app.exec())
+# if __name__ == "__main__":
+#         app = QApplication(sys.argv)
+#         MainWindow = QMainWindow()
+#         ui = Ui_MainWindow()
+#         ui.setupUi(MainWindow)
+#         MainWindow.show()
+#         sys.exit(app.exec())

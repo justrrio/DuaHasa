@@ -13,6 +13,7 @@ import os
 import sys
 
 from flashcards import Flashcard
+from pg import Multiplechoice
 
 class InteractiveLabel(QLabel):
         clicked = Signal()
@@ -131,18 +132,18 @@ class Dashboard(QMainWindow):
                 super().__init__()
                 self.setupUi(self)
 
-        def setupUi(self, MainWindow):
-                if not MainWindow.objectName():
-                        MainWindow.setObjectName(u"MainWindow")
-                MainWindow.resize(1920, 1080)
-                MainWindow.setMaximumSize(QSize(1920, 1200))
-                MainWindow.setStyleSheet(u"QMainWindow {\n"
+        def setupUi(self, dashboard):
+                if not dashboard.objectName():
+                        dashboard.setObjectName(u"dashboard")
+                dashboard.resize(1920, 1080)
+                dashboard.setMaximumSize(QSize(1920, 1200))
+                dashboard.setStyleSheet(u"QMainWindow {\n"
                 "    background-color: #EAEAEA;\n"
                 "    padding: 0px;\n"
                 "    margin: 0px;\n"
                 "}\n"
                 "")
-                self.centralwidget = QWidget(MainWindow)
+                self.centralwidget = QWidget(dashboard)
                 self.centralwidget.setObjectName(u"centralwidget")
                 self.centralwidget.setMaximumSize(QSize(1920, 1200))
                 self.centralwidget.setStyleSheet(u"QWidget{\n"
@@ -192,7 +193,7 @@ class Dashboard(QMainWindow):
                 self.Keluar_button.setToolButtonStyle(Qt.ToolButtonIconOnly)
                 self.Keluar_button.setAutoRaise(False)
                 self.Keluar_button.setCheckable(True)
-                self.Keluar_button.clicked.connect(MainWindow.close)
+                self.Keluar_button.clicked.connect(dashboard.close)
 
 
                 self.logo = QLabel(self.Left_bar)
@@ -225,26 +226,31 @@ class Dashboard(QMainWindow):
                 #=============================================================
                 #======================= Flashcard ===========================
                 #=============================================================
-                self.flashcard = QLabel(self.Left_bar)
-                self.flashcard.setObjectName(u"flashcard")
+                 # Mengubah flashcard menjadi InteractiveLabel
+                self.flashcard = InteractiveLabel(self.Left_bar)
+                self.flashcard.setObjectName("flashcard")
                 self.flashcard.setGeometry(QRect(40, 220, 291, 60))
                 self.flashcard.setMaximumSize(QSize(291, 60))
-                self.flashcard.setStyleSheet(u"QLabel {\n"
-                "    padding: 10px;                /* Padding dalam label */\n"
-                "    border: 2px solid transparent; /* Border default transparan */\n"
-                "    border-radius: 15px;          /* Border radius untuk sudut melengkung */\n"
-                "    background-color: transparent; /* Background transparan */\n"
-                "}\n"
-                "\n"
-                "QLabel:hover {\n"
-                "    border: 2px solid #2D8AE0;    /* Warna border saat di-hover */\n"
-                "    background-color: rgba(211, 211, 211, 0.5); /* Background keabu-abuan dengan opasitas */\n"
-                "}\n"
-                "")
-                self.flashcard.setPixmap(QPixmap(u"Assets/Dashboard/Left_bar/Flashcards.png"))
-                self.flashcard.setScaledContents(False)
+
+                # Menambahkan gaya dengan CSS
+                self.flashcard.setStyleSheet("""
+                QLabel {
+                        padding: 10px;
+                        border: 2px solid transparent;
+                        border-radius: 15px;
+                        background-color: transparent;
+                }
+                QLabel:hover {
+                        border: 2px solid #2D8AE0;
+                        background-color: rgba(211, 211, 211, 0.5);
+                }
+                """)
+
+                # Mengatur gambar dan kursor
+                self.flashcard.setPixmap(QPixmap("Assets/Dashboard/Left_bar/Flashcards.png"))
                 self.flashcard.setCursor(QCursor(Qt.PointingHandCursor))
-                self.flashcard.mousePressEvent = self.show_flashcard
+                 # Menghubungkan sinyal klik
+                self.flashcard.clicked.connect(self.show_flashcard)
 
                 #=============================================================
                 #======================= Multiple Choice =====================
@@ -256,7 +262,7 @@ class Dashboard(QMainWindow):
                 self.pilihan_ganda.setMaximumSize(QSize(291, 60))
 
                 # Menghubungkan sinyal klik
-                self.pilihan_ganda.clicked.connect(self.gotoPG)
+                self.pilihan_ganda.clicked.connect(self.show_Pg)
 
                 # Menambahkan gaya dengan CSS
                 self.pilihan_ganda.setStyleSheet("""
@@ -275,6 +281,7 @@ class Dashboard(QMainWindow):
                 # Mengatur gambar dan kursor
                 self.pilihan_ganda.setPixmap(QPixmap("Assets/Dashboard/Left_bar/MULTIPLE_CHOICE.png"))
                 self.pilihan_ganda.setCursor(QCursor(Qt.PointingHandCursor))
+                self.pilihan_ganda.clicked.connect(self.show_Pg)
 
                 self.horizontalLayout.addWidget(self.Left_bar)
 
@@ -1122,6 +1129,9 @@ class Dashboard(QMainWindow):
                 self.Flash_card_popup.setGeometry(QRect(110, 120, 431, 481))
                 self.Flash_card_popup.setCursor(QCursor(Qt.PointingHandCursor))
                 self.Flash_card_popup.setIconSize(QSize(1000, 1000))
+                self.Flash_card_popup.setCheckable(False)
+                self.Flash_card_popup.clicked.connect(self.show_flashcard)
+
 
                 self.Pilihan_ganda_popup = CustomToolButton(self.Pop_up_mulai,
                                             normal="Assets/Dashboard/Pilihan_ganda_popup.png",
@@ -1131,6 +1141,8 @@ class Dashboard(QMainWindow):
                 self.Pilihan_ganda_popup.setGeometry(QRect(610, 120, 430, 481))
                 self.Pilihan_ganda_popup.setCursor(QCursor(Qt.PointingHandCursor))
                 self.Pilihan_ganda_popup.setIconSize(QSize(1000, 1000))
+                self.Pilihan_ganda_popup.setCheckable(True)
+                self.Pilihan_ganda_popup.clicked.connect(self.show_Pg)
 
                 #=============================================================
                 #======================= Sesi Raise ==========================
@@ -1189,9 +1201,9 @@ class Dashboard(QMainWindow):
 
                 self.horizontalLayout.addWidget(self.Main_konten)
 
-                MainWindow.setCentralWidget(self.centralwidget)
+                dashboard.setCentralWidget(self.centralwidget)
 
-                self.retranslateUi(MainWindow)
+                self.retranslateUi(dashboard)
                 self.btn_panduan.toggled.connect(self.panduan_pop_up.setVisible)
                 self.btn_panduan.toggled.connect(self.Pop_up_bacground.setVisible)
                 self.Kembali.toggled.connect(self.Pop_up_bacground.setHidden)
@@ -1201,31 +1213,19 @@ class Dashboard(QMainWindow):
                 self.Kembali_popup_2.toggled.connect(self.Pop_up_bacground_2.setHidden)
 
 
-                QMetaObject.connectSlotsByName(MainWindow)
+                QMetaObject.connectSlotsByName(dashboard)
 
-        # goto Left_bar pg
-        def gotoPG(self):
-                # Remove the current Left_bar if it exists
-                if self.RightBar is not None:
-                        self.RightBar.setParent(None)
-                
-                # Create a new Left_bar using the pagePG class
-                self.page_pg = pagePG(self.centralwidget)
-                self.page_pg.setupFrame()
-                
-                # Set the new Left_bar as the current Left_bar
-                self.current_frame = self.page_pg.RightBar
-
-        def retranslateUi(self, MainWindow):
-                MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        
+        def retranslateUi(self, dashboard):
+                dashboard.setWindowTitle(QCoreApplication.translate("dashboard", u"dashboard", None))
                 self.Keluar_button.setText("")
-                self.logo.setText(QCoreApplication.translate("MainWindow", u"duahasa", None))
+                self.logo.setText(QCoreApplication.translate("dashboard", u"duahasa", None))
                 self.belajar.setText("")
                 self.flashcard.setText("")
                 self.pilihan_ganda.setText("")
                 self.Back_Button.setText("")
-                self.Text_sesi.setText(QCoreApplication.translate("MainWindow", u"TEXT SESI", None))
-                self.Text_Pembelajaran.setText(QCoreApplication.translate("MainWindow", u"Menggunakan Frasa Dasar", None))
+                self.Text_sesi.setText(QCoreApplication.translate("dashboard", u"TEXT SESI", None))
+                self.Text_Pembelajaran.setText(QCoreApplication.translate("dashboard", u"Menggunakan Frasa Dasar", None))
                 self.btn_panduan.setText("")
                 self.Land_2.setText("")
                 self.Land_1.setText("")
@@ -1237,47 +1237,47 @@ class Dashboard(QMainWindow):
                 self.Next_button_island_4.setText("")
                 self.Next_button_island_5.setText("")
                 self.Maskot_monyet_island.setText("")
-                self.Progress_belajar.setText(QCoreApplication.translate("MainWindow", u"Progress belajar Kamu", None))
-                self.Count_materi.setText(QCoreApplication.translate("MainWindow", u"3/10", None))
-                self.motivasi.setText(QCoreApplication.translate("MainWindow", u"Ayo tingkatkan lagi belajarnya!", None))
+                self.Progress_belajar.setText(QCoreApplication.translate("dashboard", u"Progress belajar Kamu", None))
+                self.Count_materi.setText(QCoreApplication.translate("dashboard", u"3/10", None))
+                self.motivasi.setText(QCoreApplication.translate("dashboard", u"Ayo tingkatkan lagi belajarnya!", None))
                 self.Belajar_button.setText("")
                 self.karakter.setText("")
-                self.hd_iklan_2.setText(QCoreApplication.translate("MainWindow", u"Atur Profile Kamu!", None))
+                self.hd_iklan_2.setText(QCoreApplication.translate("dashboard", u"Atur Profile Kamu!", None))
                 self.Profile_button.setText("")
                 self.Jepang.setText("")
                 self.api.setText("")
-                self.angka.setText(QCoreApplication.translate("MainWindow", u"0", None))
+                self.angka.setText(QCoreApplication.translate("dashboard", u"0", None))
                 self.segitiga.setText("")
-                self.angka_2.setText(QCoreApplication.translate("MainWindow", u"500", None))
+                self.angka_2.setText(QCoreApplication.translate("dashboard", u"500", None))
                 self.Star.setText("")
-                self.Stars_count.setText(QCoreApplication.translate("MainWindow", u"5", None))
-                self.Kembali.setText(QCoreApplication.translate("MainWindow", u"...", None))
+                self.Stars_count.setText(QCoreApplication.translate("dashboard", u"5", None))
+                self.Kembali.setText(QCoreApplication.translate("dashboard", u"...", None))
                 self.Line.setText("")
-                self.Judul_panduan.setText(QCoreApplication.translate("MainWindow", u"Unit 1 Panduan", None))
+                self.Judul_panduan.setText(QCoreApplication.translate("dashboard", u"Unit 1 Panduan", None))
                 self.Maskot_panduan.setText("")
-                self.Panduan.setText(QCoreApplication.translate("MainWindow", u"Jelajahi kiat tata bahasa dan frasa kunci untuk unit ini", None))
-                self.Label_tip.setText(QCoreApplication.translate("MainWindow", u"TIP", None))
-                self.Tips.setText(QCoreApplication.translate("MainWindow", u"Bahasa Jepang memiliki tiga sistem penulisan. Dalam hiragana, yang dapat Anda gunakan untuk menulis sebagian besar kata dalam bahasa Jepang, setiap karakter mewakili suku kata", None))
-                self.Kata_kunci.setText(QCoreApplication.translate("MainWindow", u"KATA KUNCI", None))
-                self.Isi_kata_kunci.setText(QCoreApplication.translate("MainWindow", u"Pesan Makanan", None))
+                self.Panduan.setText(QCoreApplication.translate("dashboard", u"Jelajahi kiat tata bahasa dan frasa kunci untuk unit ini", None))
+                self.Label_tip.setText(QCoreApplication.translate("dashboard", u"TIP", None))
+                self.Tips.setText(QCoreApplication.translate("dashboard", u"Bahasa Jepang memiliki tiga sistem penulisan. Dalam hiragana, yang dapat Anda gunakan untuk menulis sebagian besar kata dalam bahasa Jepang, setiap karakter mewakili suku kata", None))
+                self.Kata_kunci.setText(QCoreApplication.translate("dashboard", u"KATA KUNCI", None))
+                self.Isi_kata_kunci.setText(QCoreApplication.translate("dashboard", u"Pesan Makanan", None))
                 self.label_sound_1.setText("")
                 self.Button_sound_1.setText("")
-                self.Jepang_teks.setText(QCoreApplication.translate("MainWindow", u"\u3059\u3057\u3001    \u304f\u3060\u3055\u3044\u3002", None))
-                self.titik.setText(QCoreApplication.translate("MainWindow", u". . . . . . . .", None))
-                self.titik_2.setText(QCoreApplication.translate("MainWindow", u". . . . . . . .", None))
-                self.label_romanji.setText(QCoreApplication.translate("MainWindow", u"Sushi,   please.", None))
+                self.Jepang_teks.setText(QCoreApplication.translate("dashboard", u"\u3059\u3057\u3001    \u304f\u3060\u3055\u3044\u3002", None))
+                self.titik.setText(QCoreApplication.translate("dashboard", u". . . . . . . .", None))
+                self.titik_2.setText(QCoreApplication.translate("dashboard", u". . . . . . . .", None))
+                self.label_romanji.setText(QCoreApplication.translate("dashboard", u"Sushi,   please.", None))
                 self.label_sound_2.setText("")
                 self.Button_sound_2.setText("")
-                self.Jepang_teks_2.setText(QCoreApplication.translate("MainWindow", u"\u307f\u305a\u3067\u3059\u3002", None))
-                self.titik_3.setText(QCoreApplication.translate("MainWindow", u". . . . . . . . .", None))
-                self.label_romanji_2.setText(QCoreApplication.translate("MainWindow", u"It's water.", None))
+                self.Jepang_teks_2.setText(QCoreApplication.translate("dashboard", u"\u307f\u305a\u3067\u3059\u3002", None))
+                self.titik_3.setText(QCoreApplication.translate("dashboard", u". . . . . . . . .", None))
+                self.label_romanji_2.setText(QCoreApplication.translate("dashboard", u"It's water.", None))
                 self.label_sound_3.setText("")
                 self.Button_sound_3.setText("")
-                self.Jepang_teks_3.setText(QCoreApplication.translate("MainWindow", u"\u304a\u3061\u3083   \u304f\u3060\u3055\u3044", None))
-                self.titik_4.setText(QCoreApplication.translate("MainWindow", u". . . . . . . . .", None))
-                self.titik_5.setText(QCoreApplication.translate("MainWindow", u". . . . . . . . .", None))
-                self.label_romanji_3.setText(QCoreApplication.translate("MainWindow", u"Tea,       please.", None))
-                self.Kembali_popup_2.setText(QCoreApplication.translate("MainWindow", u"...", None))
+                self.Jepang_teks_3.setText(QCoreApplication.translate("dashboard", u"\u304a\u3061\u3083   \u304f\u3060\u3055\u3044", None))
+                self.titik_4.setText(QCoreApplication.translate("dashboard", u". . . . . . . . .", None))
+                self.titik_5.setText(QCoreApplication.translate("dashboard", u". . . . . . . . .", None))
+                self.label_romanji_3.setText(QCoreApplication.translate("dashboard", u"Tea,       please.", None))
+                self.Kembali_popup_2.setText(QCoreApplication.translate("dashboard", u"...", None))
                 self.Icon_popup_belajar.setText("")
                 self.Flash_card_popup.setText("")
                 self.Pilihan_ganda_popup.setText("")
@@ -1307,135 +1307,22 @@ class Dashboard(QMainWindow):
         #====================== Show Flashcard =======================
         #=============================================================
         
-        def show_flashcard(self, event):
+        def show_flashcard(self):
                 self.flashcard_window = Flashcard()
                 self.flashcard_window.setupUi(self.flashcard_window)
                 self.flashcard_window.show()
-                
-class pagePG(QFrame):
-        def __init__(self, parent=None):
-                super().__init__(parent)
-                self.centralwidget = parent
-        def setupFrame(self):
-                font = QFont()
-                font.setKerning(True)
-                
-                self.RightBar = QFrame(self.centralwidget)
-                self.RightBar.setObjectName(u"RightBar")
-                self.RightBar.setMaximumSize(QSize(400, 1080))
-                self.RightBar.setStyleSheet(u"QFrame {\n"
-        "    background-color: #EAEAEA;\n"
-        "    padding: 0px;\n"
-        "    margin: 0px;\n"
-        "}")
-                self.RightBar.setFrameShape(QFrame.StyledPanel)
-                self.RightBar.setFrameShadow(QFrame.Raised)
-                self.Progres = QWidget(self.RightBar)
-                self.Progres.setObjectName(u"Progres")
-                self.Progres.setGeometry(QRect(10, 90, 381, 361))
-                self.Progres.setStyleSheet(u"QWidget#Progres{\n"
-        "background-color: rgb(255, 255, 255);\n"
-        "border: 3px solid rgb(204, 204, 204) ;\n"
-        "    border-radius: 20px;\n"
-        "}")
-                self.label_14 = QLabel(self.Progres)
-                self.label_14.setObjectName(u"label_14")
-                self.label_14.setGeometry(QRect(20, 20, 321, 31))
-                font2 = QFont()
-                font2.setFamilies([u"Jellee Roman"])
-                font2.setPointSize(16)
-                self.label_14.setFont(font2)
-                self.label_14.setStyleSheet(u"QLabel{\n"
-        "color: #585858;\n"
-        "background-color: rgb(255, 255, 255);\n"
-        "}")
-                self.label_15 = QLabel(self.Progres)
-                self.label_15.setObjectName(u"label_15")
-                self.label_15.setGeometry(QRect(300, 82, 61, 41))
-                self.label_15.setFont(font2)
-                self.label_15.setStyleSheet(u"QLabel{\n"
-        "color: #585858;\n"
-        "background-color: rgb(255, 255, 255);\n"
-        "}")
-                self.label_16 = QLabel(self.Progres)
-                self.label_16.setObjectName(u"label_16")
-                self.label_16.setGeometry(QRect(20, 150, 321, 31))
-                self.label_16.setFont(font2)
-                self.label_16.setStyleSheet(u"QLabel{\n"
-        "color: #585858;\n"
-        "background-color: rgb(255, 255, 255);\n"
-        "}")
-                self.PBar = QLabel(self.Progres)
-                self.PBar.setObjectName(u"PBar")
-                self.PBar.setGeometry(QRect(20, 90, 260, 25))
-                self.PBar.setMinimumSize(QSize(260, 0))
-                self.PBar.setMaximumSize(QSize(100, 999999))
-                self.PBar.setStyleSheet(u"QLabel{\n"
-        "background-color: rgb(255, 255, 255);\n"
-        "}")
-                self.PBar.setPixmap(QPixmap(u"Assets/PG/ProgressBar.png"))
-                self.PBar.setScaledContents(True)
-                self.label_17 = QLabel(self.Progres)
-                self.label_17.setObjectName(u"label_17")
-                self.label_17.setGeometry(QRect(170, 180, 161, 101))
-                font3 = QFont()
-                font3.setFamilies([u"Jellee Roman"])
-                font3.setPointSize(12)
-                self.label_17.setFont(font3)
-                self.label_17.setStyleSheet(u"QLabel{\n"
-        "color: #585858;\n"
-        "background-color: rgb(255, 255, 255);\n"
-        "}")
-                self.Jepang_2 = QLabel(self.Progres)
-                self.Jepang_2.setObjectName(u"Jepang_2")
-                self.Jepang_2.setGeometry(QRect(20, 190, 128, 137))
-                self.Jepang_2.setMinimumSize(QSize(128, 137))
-                self.Jepang_2.setMaximumSize(QSize(128, 137))
-                self.Jepang_2.setStyleSheet(u"QLabel{\n"
-        "background-color: rgb(255, 255, 255);\n"
-        "}")
-                self.Jepang_2.setPixmap(QPixmap(u"Assets/PG/monkey.png"))
-                self.Jepang_2.setScaledContents(True)
-                self.Next_button_island_7 = QToolButton(self.Progres)
-                self.Next_button_island_7.setObjectName(u"Next_button_island_7")
-                self.Next_button_island_7.setGeometry(QRect(140, 290, 191, 31))
-                self.Next_button_island_7.setMaximumSize(QSize(1000, 1000))
-                self.Next_button_island_7.setFont(font)
-                self.Next_button_island_7.setContextMenuPolicy(Qt.NoContextMenu)
-                self.Next_button_island_7.setAutoFillBackground(False)
-                self.Next_button_island_7.setStyleSheet(u"QToolButton {\n"
-        "    border: none;                  /* Menghilangkan border */\n"
-        "    background: transparent;       /* Membuat background transparan */\n"
-        "    padding: 0;                    /* Menghilangkan padding */\n"
-        "}\n"
-        "")
-                icon5 = QIcon()
-                icon5.addFile(u"Assets/PG/btn_atur.png", QSize(), QIcon.Normal, QIcon.Off)
-                icon5.addFile(u"Assets/PG/btn_atur_pres.png", QSize(), QIcon.Selected, QIcon.On)
-                self.Next_button_island_7.setIcon(icon5)
-                self.Next_button_island_7.setIconSize(QSize(1000, 1000))
-                self.Next_button_island_7.setCheckable(False)
-                self.Next_button_island_7.setAutoRepeat(False)
-                self.Next_button_island_7.setToolButtonStyle(Qt.ToolButtonIconOnly)
-                self.Next_button_island_7.setAutoRaise(False)
-                self.layoutWidget = QWidget(self.RightBar)
-                self.layoutWidget.setObjectName(u"layoutWidget")
-                self.layoutWidget.setGeometry(QRect(30, 20, 321, 44))
-                self.horizontalLayout_6 = QHBoxLayout(self.layoutWidget)
-                self.horizontalLayout_6.setSpacing(9)
-                self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-                self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
-                self.Jepang = QLabel(self.layoutWidget)
-                self.Jepang.setObjectName(u"Jepang")
-                self.Jepang.setMaximumSize(QSize(100, 100))
-                self.Jepang.setPixmap(QPixmap(u"Assets/Dashboard/Right_bar/bendera_jepang.png"))
-                self.Jepang.setScaledContents(True)
-        #=============================================================
+                self.close()
+                        
+        def show_Pg(self):
+                self.Pg_window = Multiplechoice()
+                self.Pg_window.setupUi(self.Pg_window)
+                self.Pg_window.show()
+                self.close()
 
 if __name__ == "__main__":
         app = QApplication(sys.argv)
-        MainWindow = QMainWindow()
+        dashboard = QMainWindow()
         ui = Dashboard()
-        ui.setupUi(MainWindow)
-        MainWindow.show()
+        ui.setupUi(dashboard)
+        dashboard.show()
         sys.exit(app.exec())
