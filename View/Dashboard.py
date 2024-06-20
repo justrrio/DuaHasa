@@ -12,6 +12,8 @@ from PySide6.QtMultimedia import QSoundEffect
 import os
 import sys
 
+from flashcards import Flashcard
+
 class InteractiveLabel(QLabel):
         clicked = Signal()
 
@@ -236,6 +238,7 @@ class dashboard(object):
                 self.flashcard.setPixmap(QPixmap(u"Assets/Dashboard/Left_bar/Flashcards.png"))
                 self.flashcard.setScaledContents(False)
                 self.flashcard.setCursor(QCursor(Qt.PointingHandCursor))
+                self.flashcard.mousePressEvent = self.show_flashcard
 
                 #=============================================================
                 #======================= Multiple Choice =====================
@@ -407,7 +410,7 @@ class dashboard(object):
                 self.Start_btn.setAutoRepeat(False)
                 self.Start_btn.setToolButtonStyle(Qt.ToolButtonIconOnly)
                 self.Start_btn.setAutoRaise(False)
-
+                self.Start_btn.setCheckable(True)
                 #=============================================================
                 self.Next_button_island = QToolButton(self.Main_konten)
                 self.Next_button_island.setObjectName(u"Next_button_island")
@@ -1069,7 +1072,11 @@ class dashboard(object):
                 #=============================================================
                 #======================= Pop up Mulai ========================
                 #=============================================================
-                self.Pop_up_mulai = QWidget(self.Pop_up_bacground)
+                self.Pop_up_bacground_2 = QWidget(self.Main_konten)
+                self.Pop_up_bacground_2.setObjectName(u"Pop_up_bacground_2")
+                self.Pop_up_bacground_2.setGeometry(QRect(-1, -1, 1501, 1061))
+                self.Pop_up_bacground_2.setStyleSheet(u" background-color: rgba(0, 0, 0, 128); /* Black background with 50% opacity */")
+                self.Pop_up_mulai = QWidget(self.Pop_up_bacground_2)
                 self.Pop_up_mulai.setObjectName(u"Pop_up_mulai")
                 self.Pop_up_mulai.setEnabled(True)
                 self.Pop_up_mulai.setGeometry(QRect(200, 120, 1141, 700))
@@ -1083,35 +1090,40 @@ class dashboard(object):
                 self.Kembali_popup_2.setGeometry(QRect(40, 30, 151, 61))
                 self.Kembali_popup_2.setContextMenuPolicy(Qt.NoContextMenu)
                 icon8 = QIcon()
-                icon8.addFile(u"../Documents/Project/DuaHasa/Assets/Dashboard/Kembali_popup_2.png", QSize(), QIcon.Normal, QIcon.Off)
+                icon8.addFile(u"Assets/Dashboard/Kembali.png", QSize(), QIcon.Normal, QIcon.Off)
                 self.Kembali_popup_2.setIcon(icon8)
                 self.Kembali_popup_2.setIconSize(QSize(1000, 1000))
                 self.Kembali_popup_2.setCheckable(True)
+                self.Kembali_popup_2.setCheckable(True)
+                self.Kembali_popup_2.setCursor(QCursor(Qt.PointingHandCursor))
+
                 self.Icon_popup_belajar = QToolButton(self.Pop_up_mulai)
                 self.Icon_popup_belajar.setObjectName(u"Icon_popup_belajar")
                 self.Icon_popup_belajar.setGeometry(QRect(440, 30, 401, 61))
                 self.Icon_popup_belajar.setContextMenuPolicy(Qt.NoContextMenu)
                 icon9 = QIcon()
-                icon9.addFile(u"../Documents/Project/DuaHasa/Assets/Dashboard/Mulai_belajar_popup1.png", QSize(), QIcon.Normal, QIcon.Off)
+                icon9.addFile(u"Assets/Dashboard/Mulai_belajar_popup1.png", QSize(), QIcon.Normal, QIcon.Off)
                 self.Icon_popup_belajar.setIcon(icon9)
                 self.Icon_popup_belajar.setIconSize(QSize(1000, 1000))
-                self.Flash_card_popup = QToolButton(self.Pop_up_mulai)
+
+                self.Flash_card_popup = CustomToolButton(self.Pop_up_mulai,
+                                         normal="Assets/Dashboard/Flash_card_belajar.png",
+                                         pressed="Assets/Dashboard/Flash_card_belajar_pressed.png",
+                                         hover="Assets/Dashboard/Flash_card_belajar.png")
                 self.Flash_card_popup.setObjectName(u"Flash_card_popup")
                 self.Flash_card_popup.setGeometry(QRect(110, 120, 431, 481))
                 self.Flash_card_popup.setCursor(QCursor(Qt.PointingHandCursor))
-                icon10 = QIcon()
-                icon10.addFile(u"../Documents/Project/DuaHasa/Assets/Dashboard/Flash_card_belajar.png", QSize(), QIcon.Normal, QIcon.Off)
-                self.Flash_card_popup.setIcon(icon10)
                 self.Flash_card_popup.setIconSize(QSize(1000, 1000))
-                self.Pilihan_ganda_popup = QToolButton(self.Pop_up_mulai)
+
+                self.Pilihan_ganda_popup = CustomToolButton(self.Pop_up_mulai,
+                                            normal="Assets/Dashboard/Pilihan_ganda_popup.png",
+                                            pressed="Assets/Dashboard/Pilihan_ganda_popup_pressed.png",
+                                            hover="Assets/Dashboard/Pilihan_ganda_popup.png")
                 self.Pilihan_ganda_popup.setObjectName(u"Pilihan_ganda_popup")
                 self.Pilihan_ganda_popup.setGeometry(QRect(610, 120, 430, 481))
                 self.Pilihan_ganda_popup.setCursor(QCursor(Qt.PointingHandCursor))
-                icon11 = QIcon()
-                icon11.addFile(u"../Documents/Project/DuaHasa/Assets/Dashboard/Pilihan_ganda_popup.png", QSize(), QIcon.Normal, QIcon.Off)
-                self.Pilihan_ganda_popup.setIcon(icon11)
                 self.Pilihan_ganda_popup.setIconSize(QSize(1000, 1000))
-                
+
                 #=============================================================
                 #======================= Sesi Raise ==========================
                 #=============================================================
@@ -1128,6 +1140,7 @@ class dashboard(object):
                 self.Maskot_monyet_island.raise_()
                 self.RightBar.raise_()
                 self.Pop_up_bacground.raise_()
+                self.Pop_up_bacground_2.raise_()
 
 
                 self.horizontalLayout.addWidget(self.Main_konten)
@@ -1175,6 +1188,10 @@ class dashboard(object):
                 self.btn_panduan.toggled.connect(self.Pop_up_bacground.setVisible)
                 self.Kembali.toggled.connect(self.Pop_up_bacground.setHidden)
                 self.Kembali.toggled.connect(self.panduan_pop_up.setHidden)
+                self.Start_btn.toggled.connect(self.Pop_up_bacground_2.setVisible)
+                self.Start_btn.toggled.connect(self.Pop_up_mulai.setVisible)
+                self.Kembali_popup_2.toggled.connect(self.Pop_up_bacground_2.setHidden)
+
 
                 QMetaObject.connectSlotsByName(MainWindow)
 
@@ -1252,6 +1269,10 @@ class dashboard(object):
                 self.titik_4.setText(QCoreApplication.translate("MainWindow", u". . . . . . . . .", None))
                 self.titik_5.setText(QCoreApplication.translate("MainWindow", u". . . . . . . . .", None))
                 self.label_romanji_3.setText(QCoreApplication.translate("MainWindow", u"Tea,       please.", None))
+                self.Kembali_popup_2.setText(QCoreApplication.translate("MainWindow", u"...", None))
+                self.Icon_popup_belajar.setText("")
+                self.Flash_card_popup.setText("")
+                self.Pilihan_ganda_popup.setText("")
         # retranslateUi
 
         def create_bounce_animation(self, button):
@@ -1275,7 +1296,12 @@ class dashboard(object):
                 return animation_group
 
         #=============================================================
-        #======================= PopUp Panduan =======================
+        #====================== Show Flashcard =======================
+        #=============================================================
+        def show_flashcard(self):
+                self.flashcard = Flashcard(self.centralwidget)
+                self.flashcard.setupFrame()
+
 class pagePG(QFrame):
         def __init__(self, parent=None):
                 super().__init__(parent)
