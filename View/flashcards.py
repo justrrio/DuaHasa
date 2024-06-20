@@ -826,33 +826,54 @@ class Flashcard(object):
     def updatePertanyaan(self, status):
         # Update dari comboBox
         selected_text = self.comboBox.currentText()
-        result_text = selected_text.split(" - ", 1)[1]
+
+        if " - " in selected_text:
+                result_text = selected_text.split(" - ", 1)[1]
+        else:
+                result_text = "Pertanyaan tidak valid"
 
         # Mengambil data flashcard dari JSON
         folder_path = os.path.join(os.getcwd(), "Flashcards")
-        index = selected_text.split(" ")[1]
+        try:
+                index = selected_text.split(" ")[1]
+        except IndexError:
+                QMessageBox.warning(None, "Warning", "Format pertanyaan tidak valid.")
+                return
+
         print("updatePertanyaan(index):", index)
         print("PATH:", folder_path)
         file_path = os.path.join(folder_path, f"{index}_flashcard.json")
 
-        # Inisialisasi gambar_path
+        # Inisialisasi gambar_path, jawaban_jepang, dan jawaban_latin dengan nilai default
         gambar_path = ""
+        jawaban_jepang = ""
+        jawaban_latin = ""
+
         if os.path.exists(file_path):
                 with open(file_path, 'r', encoding='utf-8') as file:
                         data = json.load(file)
                         gambar_path = data.get("gambar", "")
-                        jawaban_jepang_path = data.get("jawaban_jepang", "")
-                        jawaban_latin_path = data.get("jawaban_latin", "")
+                        jawaban_jepang = data.get("jawaban_jepang", "")
+                        jawaban_latin = data.get("jawaban_latin", "")
+        else:
+                QMessageBox.warning(None, "Warning", f"Flashcard {index} tidak ditemukan.")
+                # Atur gambar ke gambar not found jika file JSON tidak ditemukan
+                gambar_path = "Assets/Flashcards/Middlebar/Tidak Ada Gambar.png"
+
         print("Gambar path", gambar_path)
 
         # Update dari flashcard
         if status == "flashcard" and not self.text_changed:
                 result_text = "Jawaban"
-                self.jawaban_jepang.setText(jawaban_jepang_path)
-                self.jawaban_latin.setText(jawaban_latin_path)
+                self.jawaban_jepang.setText(jawaban_jepang)
+                self.jawaban_latin.setText(jawaban_latin)
                 
                 self.text_changed = True
                 self.image.hide()
+                if gambar_path and os.path.exists(gambar_path):
+                        self.image.setPixmap(QPixmap(gambar_path))
+                else:
+                        self.image.setPixmap(QPixmap("Assets/Flashcards/Middlebar/Tidak Ada Gambar.png"))
                 self.frame_4.show()
                 self.jawaban_jepang.show()
                 self.jawaban_latin.show()
