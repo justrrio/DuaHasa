@@ -796,6 +796,7 @@ class dashboard(QMainWindow):
         "}")
                 self.horizontalLayout_4.addWidget(self.Stars_count)
 
+
                 self.horizontalLayout_6.addLayout(self.horizontalLayout_4)
                 
                 #=============================================================
