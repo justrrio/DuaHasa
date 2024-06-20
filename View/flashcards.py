@@ -70,18 +70,21 @@ class AutoResizeLabel(QLabel):
 
         self.setFont(font)
 
-class Flashcard(object):
-    def setupUi(self, MainWindow):        
+class Flashcard(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+    def setupUi(self, MainWindow):
         if not MainWindow.objectName():
-            MainWindow.setObjectName(u"MainWindow")
+            MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1920, 1080)
         MainWindow.setMaximumSize(QSize(1920, 1200))
-        MainWindow.setStyleSheet(u"QMainWindow {\n"
-"    background-color: #EAEAEA;\n"
-"    padding: 0px;\n"
-"    margin: 0px;\n"
-"}\n"
-"")
+        MainWindow.setStyleSheet("QMainWindow {\n"
+                                 "    background-color: #EAEAEA;\n"
+                                 "    padding: 0px;\n"
+                                 "    margin: 0px;\n"
+                                 "}\n"
+                                 "")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.centralwidget.setMaximumSize(QSize(1920, 1200))
