@@ -17,9 +17,12 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QHBoxLayout,
     QLabel, QMainWindow, QProgressBar, QPushButton,
-    QSizePolicy, QToolButton, QWidget, QStyledItemDelegate, QVBoxLayout, QGraphicsOpacityEffect, QPlainTextEdit, QFileDialog)
+    QSizePolicy, QToolButton, QWidget, QStyledItemDelegate, QVBoxLayout, QGraphicsOpacityEffect, QPlainTextEdit, QFileDialog, QMessageBox)
 
 import sys
+import os
+import ctypes
+import json
 
 class EllipsisDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
@@ -375,7 +378,8 @@ class Flashcard(object):
 
         self.btnTambahFlashcard = QLabel(self.frame_2)
         self.btnTambahFlashcard.setObjectName(u"btnTambahFlashcard")
-        self.btnTambahFlashcard.setGeometry(QRect(300, 750, 311, 61))
+        # self.btnTambahFlashcard.setGeometry(QRect(500, 750, 311, 61))
+        self.btnTambahFlashcard.setGeometry(QRect(500, 300, 311, 61))
         self.btnTambahFlashcard.setPixmap(QPixmap(u"Assets/Flashcards/Middlebar/Tambah Flashcard.png"))
         self.btnTambahFlashcard.setScaledContents(True)
         self.btnTambahFlashcard.setCursor(QCursor(Qt.PointingHandCursor))
@@ -427,12 +431,15 @@ class Flashcard(object):
         self.image.setFont(font2)
         self.image.setCursor(QCursor(Qt.PointingHandCursor))
         self.image.setStyleSheet(u"QLabel {\n"
-"    background-color: transparent; /* Background transparan */\n"
-"	color: white;\n"
-"}")
-        self.image.setPixmap(QPixmap(u"Assets/Flashcards/Middlebar/image v2.png"))
+                                "    background-color: transparent; /* Background transparan */\n"
+                                "    color: white;\n"
+                                "}")
         self.image.setScaledContents(False)
         self.image.setWordWrap(True)
+
+        # Panggil fungsi untuk memuat gambar dari JSON atau gambar default
+        self.loadImageFromJson()
+        
         self.labelTekanFlashcard = QLabel(self.Flashcard)
         self.labelTekanFlashcard.setObjectName(u"labelTekanFlashcard")
         self.labelTekanFlashcard.setGeometry(QRect(180, 700, 401, 111))
@@ -681,9 +688,9 @@ class Flashcard(object):
 "background-color: rgb(255, 255, 255);\n"
 "}")
         self.comboBox = QComboBox(self.Urutan)
-        self.comboBox.addItem("Kartu 1 - Apa yang sedang dia lakukan?")
-        self.comboBox.addItem("Kartu 2 - Mengapa dia melakukan itu?")
-        self.comboBox.addItem("Kartu 3 - Bagaimana cara dia melakukannya?")
+        self.comboBox.addItem("Tidak Ada Kartu")
+        # self.comboBox.addItem("Kartu 2 - Mengapa dia melakukan itu?")
+        # self.comboBox.addItem("Kartu 3 - Bagaimana cara dia melakukannya?")
         self.comboBox.setObjectName(u"comboBox")
         self.comboBox.setGeometry(QRect(15, 60, 341, 61))
         self.comboBox.setFont(font3)
@@ -725,6 +732,7 @@ class Flashcard(object):
 "    border: 0;\n"
 "    font-size: 12px; /* Mengubah ukuran font saat dihover juga */\n"
 "}\n")
+        self.populateComboBox()
 
         # Mengatur delegate untuk menampilkan elipsis pada teks yang panjang
         delegate = EllipsisDelegate(self.comboBox)
@@ -801,6 +809,7 @@ class Flashcard(object):
         self.labelTekanFlashcard.mousePressEvent = lambda event: self.updatePertanyaan("flashcard")
         self.btnAtur.mousePressEvent = lambda event: self.popUp()
         self.btnKembaliPopUp.mousePressEvent = lambda event: self.popUp()
+        self.btnTambahFlashcard.mousePressEvent = lambda event: self.tambahFlashcard()
 
         self.inputGambarFlashcardDepan.mousePressEvent = self.openFileDialog
 
@@ -819,24 +828,49 @@ class Flashcard(object):
         selected_text = self.comboBox.currentText()
         result_text = selected_text.split(" - ", 1)[1]
 
+        # Mengambil data flashcard dari JSON
+        folder_path = os.path.join(os.getcwd(), "Flashcards")
+        index = selected_text.split(" ")[1]
+        print("updatePertanyaan(index):", index)
+        print("PATH:", folder_path)
+        file_path = os.path.join(folder_path, f"{index}_flashcard.json")
+
+        # Inisialisasi gambar_path
+        gambar_path = ""
+        if os.path.exists(file_path):
+                with open(file_path, 'r', encoding='utf-8') as file:
+                        data = json.load(file)
+                        gambar_path = data.get("gambar", "")
+                        jawaban_jepang_path = data.get("jawaban_jepang", "")
+                        jawaban_latin_path = data.get("jawaban_latin", "")
+        print("Gambar path", gambar_path)
+
         # Update dari flashcard
         if status == "flashcard" and not self.text_changed:
-            result_text = "Jawaban"
-            self.text_changed = True
-            self.image.hide()
-            self.frame_4.show()
-            self.jawaban_jepang.show()
-            self.jawaban_latin.show()
-            # Start opacity animation
-            self.opacity_animation.setStartValue(0)
-            self.opacity_animation.setEndValue(1)
-            self.opacity_animation.start()
+                result_text = "Jawaban"
+                self.jawaban_jepang.setText(jawaban_jepang_path)
+                self.jawaban_latin.setText(jawaban_latin_path)
+                
+                self.text_changed = True
+                self.image.hide()
+                self.frame_4.show()
+                self.jawaban_jepang.show()
+                self.jawaban_latin.show()
+                # Start opacity animation
+                self.opacity_animation.setStartValue(0)
+                self.opacity_animation.setEndValue(1)
+                self.opacity_animation.start()
         else:
-            self.text_changed = False
-            self.image.show()
-            self.frame_4.hide()
-            self.jawaban_jepang.hide()
-            self.jawaban_latin.hide()
+                self.text_changed = False
+                if gambar_path and os.path.exists(gambar_path):
+                        self.image.setPixmap(QPixmap(gambar_path))
+                else:
+                        self.image.setPixmap(QPixmap("Assets/Flashcards/Middlebar/Tidak Ada Gambar.png"))                
+                self.image.show()
+                self.frame_4.hide()
+                self.jawaban_jepang.hide()
+                self.jawaban_latin.hide()
+
         self.pertanyaan.setText(result_text)
 
     def popUp(self):
@@ -857,6 +891,12 @@ class Flashcard(object):
             self.inputGambarFlashcardDepan.setVisible(False)
             self.btnTambahFlashcard.setVisible(False)
             self.popup_changed = False
+            # Reset values in popup
+            self.inputTextFlashcardDepan.clear()
+            self.inputTextFlashcardBelakangJepang.clear()
+            self.inputTextFlashcardBelakangLatin.clear()
+            self.inputGambarFlashcardDepan.setPixmap(QPixmap(u"Assets/Flashcards/Middlebar/Unggah Gambar.png"))
+            self.selectedFile = ""  # Clear the selected file path
         else:
             self.flashcardPopUp.setVisible(True)
             self.flashcardBgPopUp.setVisible(True)
@@ -880,7 +920,96 @@ class Flashcard(object):
         options |= QFileDialog.ReadOnly
         fileName, _ = QFileDialog.getOpenFileName(None, "Select Image", "", "Images (*.png *.jpg *.jpeg *.bmp *.gif)", options=options)
         if fileName:
-            self.inputGambarFlashcardDepan.setPixmap(QPixmap(fileName))
+            self.selectedFile = fileName
+            self.inputGambarFlashcardDepan.setPixmap(QPixmap(self.selectedFile))
+
+    def tambahFlashcard(self):
+        pertanyaan = self.inputTextFlashcardDepan.toPlainText()
+        gambar = self.selectedFile
+        jawaban_jepang = self.inputTextFlashcardBelakangJepang.toPlainText()
+        jawaban_latin = self.inputTextFlashcardBelakangLatin.toPlainText()
+
+        print("Pertanyaan:", pertanyaan)
+        print("gambar:", gambar)
+        print("jepang:", jawaban_jepang)
+        print("latin:", jawaban_latin)
+        data = {
+                "pertanyaan": pertanyaan,
+                "gambar": gambar,
+                "jawaban_jepang": jawaban_jepang,
+                "jawaban_latin": jawaban_latin
+        }
+
+        folder_path = "Flashcards"
+        if not os.path.exists(folder_path):
+                os.makedirs(folder_path)
+                # Make the folder hidden
+                if os.name == 'nt':  # Check if the operating system is Windows
+                        ctypes.windll.kernel32.SetFileAttributesW(folder_path, 0x02)  # 0x02 is the attribute for hidden folder
+
+        index = 1
+        while os.path.exists(os.path.join(folder_path, f"{index}_flashcard.json")):
+                index += 1
+
+        file_path = os.path.join(folder_path, f"{index}_flashcard.json")
+
+        with open(file_path, 'w', encoding='utf-8') as file:
+                json.dump(data, file, ensure_ascii=False, indent=4)
+        
+        # Update combobox and show message box
+        self.populateComboBox()
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Information)
+        msgBox.setText("Flashcard berhasil ditambahkan!")
+        msgBox.setWindowTitle("Success")
+        msgBox.setStandardButtons(QMessageBox.Ok)
+        msgBox.buttonClicked.connect(self.popUp)
+        msgBox.exec_()
+        
+    def populateComboBox(self):
+                folder_path = os.path.join(os.getcwd(), "Flashcards")
+                
+                if not os.path.exists(folder_path):
+                        # QMessageBox.warning(None, "Warning", "No flashcards found.")
+                        return
+
+                flashcard_files = [f for f in os.listdir(folder_path) if f.endswith('.json')]
+
+                if not flashcard_files:
+                        # QMessageBox.warning(None, "Warning", "No flashcards found.")
+                        return
+
+                self.comboBox.clear()
+
+                for flashcard_file in flashcard_files:
+                        file_path = os.path.join(folder_path, flashcard_file)
+                        with open(file_path, 'r', encoding='utf-8') as file:
+                                data = json.load(file)
+                                pertanyaan = data.get("pertanyaan", "")
+                                if pertanyaan:
+                                        index_file = flashcard_file.split("_")[0]
+                                        self.comboBox.addItem(f"Kartu {index_file} - {pertanyaan}")
+                                        
+    def loadImageFromJson(self):
+        folder_path = os.path.join(os.getcwd(), "Flashcards")
+        if not os.path.exists(folder_path):
+                self.image.setPixmap(QPixmap("Assets/Flashcards/Middlebar/Tidak Ada Gambar.png"))
+                return
+        
+        flashcard_files = [f for f in os.listdir(folder_path) if f.endswith('.json')]
+        if not flashcard_files:
+                self.image.setPixmap(QPixmap("Assets/Flashcards/Middlebar/Tidak Ada Gambar.png"))
+                return
+
+        for flashcard_file in sorted(flashcard_files, key=lambda x: int(x.split('_')[0])):
+                file_path = os.path.join(folder_path, flashcard_file)
+                with open(file_path, 'r', encoding='utf-8') as file:
+                        data = json.load(file)
+                        gambar_path = data.get("gambar", "")
+                        if os.path.exists(gambar_path):
+                                self.image.setPixmap(QPixmap(gambar_path))
+                                return  # Stop after loading the first valid image
+        self.image.setPixmap(QPixmap("Assets/Flashcards/Middlebar/Tidak Ada Gambar.png"))
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
@@ -889,7 +1018,7 @@ class Flashcard(object):
         self.flashcard_active.setText("")
         self.belajar.setText("")
         self.pilihan_ganda.setText("")
-        self.pertanyaan.setText(QCoreApplication.translate("MainWindow", u"Apa yang sedang dia lakukan?", None))
+        self.pertanyaan.setText(QCoreApplication.translate("MainWindow", u"Pertanyaan", None))
         self.background.setText("")
         self.image.setText("")
         self.labelTekanFlashcard.setText(QCoreApplication.translate("MainWindow", u"Tekan untuk melihat jawaban", None))
@@ -906,12 +1035,13 @@ class Flashcard(object):
         self.Star.setText("")
         self.Stars_count.setText(QCoreApplication.translate("MainWindow", u"5", None))
         self.header_3.setText(QCoreApplication.translate("MainWindow", u"Urutan Kartu", None))
-        self.comboBox.setItemText(0, QCoreApplication.translate("MainWindow", u"Kartu 1 - Apa yang sedang dia lakukan?", None))
-        self.comboBox.setItemText(1, QCoreApplication.translate("MainWindow", u"Kartu 2 - Kenapa kamu melakukan hal tersebut?", None))
-        self.comboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"Kartu 3 - Bagaimana cara dia melakukannya?", None))
+        # self.comboBox.setItemText(0, QCoreApplication.translate("MainWindow", u"Kartu 1 - Apa yang sedang dia lakukan?", None))
+        # self.comboBox.setItemText(1, QCoreApplication.translate("MainWindow", u"Kartu 2 - Kenapa kamu melakukan hal tersebut?", None))
+        # self.comboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"Kartu 3 - Bagaimana cara dia melakukannya?", None))
         self.labelTekanFlashcardDepan.setText(QCoreApplication.translate("MainWindow", u"Tekan untuk melihat jawaban", None))
         self.labelTekanFlashcardBelakang.setText(QCoreApplication.translate("MainWindow", u"Tekan untuk melihat jawaban", None))
         self.labelJawabanBelakang.setText(QCoreApplication.translate("MainWindow", u"Jawaban", None))
+        self.populateComboBox()
     # retranslateUi
 
 if __name__ == "__main__":
@@ -919,4 +1049,5 @@ if __name__ == "__main__":
     MainWindow = QMainWindow()
     ui = Flashcard()
     ui.setupUi(MainWindow)
+    MainWindow.show()
     sys.exit(app.exec())
