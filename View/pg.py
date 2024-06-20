@@ -77,6 +77,7 @@ class Multiplechoice(QMainWindow):
         self.Next_button_island_6.setAutoRepeat(False)
         self.Next_button_island_6.setToolButtonStyle(Qt.ToolButtonIconOnly)
         self.Next_button_island_6.setAutoRaise(False)
+        self.Next_button_island_6.clicked.connect(MainWindow.close)
         self.logo = QLabel(self.frame)
         self.logo.setObjectName(u"logo")
         self.logo.setGeometry(QRect(41, 41, 300, 90))
