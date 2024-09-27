@@ -1,7 +1,7 @@
 {
-    "pertanyaan": "test",
-    "gambar": "C:/Users/Nogo/Documents/DuaHasa/Assets/character.png",
-    "jawaban_jepang": "test",
-    "jawaban_latin": "tse",
+    "pertanyaan": "Itu apa?",
+    "gambar": "C:/Penyimpanan Utama/Documents/Project/DuaHasa/Assets/burung.jpg",
+    "jawaban_jepang": "これは鳥です",
+    "jawaban_latin": "Kore wa toridesu",
     "terjawab": true
 }

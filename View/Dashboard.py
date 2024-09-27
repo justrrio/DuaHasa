@@ -937,6 +937,7 @@ class Dashboard(QMainWindow):
                 # Set up sound effect 
                 self.sound_effect_1 = QSoundEffect()
                 self.sound_effect_1.setSource(QUrl.fromLocalFile("Assets/Dashboard/Sound_effect/Sushi_Kudasai.wav"))
+                self.sound_effect_1.setVolume(1)
 
                 # Connect sound effect to button
                 self.Button_sound_1.clicked.connect(self.sound_effect_1.play)
@@ -997,6 +998,7 @@ class Dashboard(QMainWindow):
                 # Set up sound effect
                 self.sound_effect_2 = QSoundEffect()
                 self.sound_effect_2.setSource(QUrl.fromLocalFile("Assets/Dashboard/Sound_effect/Mizu_desu.wav"))
+                self.sound_effect_2.setVolume(1)
 
                 # Connect sound effect to button
                 self.Button_sound_2.clicked.connect(self.sound_effect_2.play)
@@ -1046,6 +1048,7 @@ class Dashboard(QMainWindow):
                 # Set up sound effect
                 self.sound_effect_3 = QSoundEffect()
                 self.sound_effect_3.setSource(QUrl.fromLocalFile("Assets/Dashboard/Sound_effect/Ocha_kudasai.wav"))
+                self.sound_effect_3.setVolume(1)
 
                 # Connect sound effect to button
                 self.Button_sound_3.clicked.connect(self.sound_effect_3.play)
@@ -1183,7 +1186,7 @@ class Dashboard(QMainWindow):
                         self.sound_effect = QSoundEffect()
                         self.sound_effect.setSource(QUrl.fromLocalFile(music_file))
                         self.sound_effect.setLoopCount(-2)  # Infinite loop
-                        self.sound_effect.setVolume(0.2)  # Set the volume (0.0 to 1.0)
+                        self.sound_effect.setVolume(0.4)  # Set the volume (0.0 to 1.0)
                         self.sound_effect.play()
 
                 #=============================================================
@@ -1310,14 +1313,14 @@ class Dashboard(QMainWindow):
         def show_flashcard(self):
                 self.flashcard_window = Flashcard()
                 self.flashcard_window.setupUi(self.flashcard_window)
-                self.flashcard_window.show()
                 self.destroy()
+                self.flashcard_window.show()
                         
         def show_Pg(self):
                 self.Pg_window = Multiplechoice()
                 self.Pg_window.setupUi(self.Pg_window)
                 self.Pg_window.show()
-                self.destroy()
+                self.close()
 
 if __name__ == "__main__":
         app = QApplication(sys.argv)
